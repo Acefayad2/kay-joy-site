@@ -48,6 +48,11 @@ const membership = {
   benefits: "5 drinks for the month",
 };
 
+const membershipPickupOptions = {
+  "all-at-once": "Pickup preference: all 5 drinks at once",
+  "monthly-visits": "Pickup preference: 1 drink at a time throughout the month",
+};
+
 const state = {
   cart: [],
 };
@@ -90,8 +95,20 @@ function findItem(id) {
   return products.find((product) => product.id === id) || membership;
 }
 
-function addToCart(id) {
-  const item = findItem(id);
+function selectedMembership() {
+  const selected = document.querySelector("input[name='membership-pickup']:checked");
+  const pickupType = selected ? selected.value : "all-at-once";
+
+  return {
+    ...membership,
+    id: `${membership.id}-${pickupType}`,
+    benefits: `${membership.benefits}. ${membershipPickupOptions[pickupType]}`,
+    pickupType,
+  };
+}
+
+function addToCart(id, customItem) {
+  const item = customItem || findItem(id);
   const existing = state.cart.find((cartItem) => cartItem.id === id);
 
   if (existing) {
@@ -202,7 +219,8 @@ document.addEventListener("click", (event) => {
   }
 
   if (event.target.closest("[data-add-membership]")) {
-    addToCart(membership.id);
+    const item = selectedMembership();
+    addToCart(item.id, item);
     openCart();
   }
 

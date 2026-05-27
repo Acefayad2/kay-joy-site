@@ -448,6 +448,55 @@ h3 {
   font-weight: 950;
 }
 
+.membership-options {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.membership-options legend {
+  margin-bottom: 0.25rem;
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 950;
+}
+
+.membership-options label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(23, 49, 40, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+}
+
+.membership-options input {
+  width: 18px;
+  min-height: 18px;
+  margin-top: 0.16rem;
+  accent-color: var(--leaf);
+}
+
+.membership-options span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.membership-options strong {
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+
+.membership-options small {
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .checkout {
   display: grid;
   gap: 1rem;
