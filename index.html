@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kay Joy Cold Press Juices</title>
+    <meta name="description" content="Kay Joy cold press juice preorder and pickup storefront.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Kay Joy home">
+        <img src="assets/kay-joy-logo.jpeg" alt="">
+        <span>Kay Joy</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#menu">Menu</a>
+        <a href="#membership">Membership</a>
+        <a href="#pickup">Pickup</a>
+      </nav>
+      <button class="cart-toggle" type="button" data-open-cart>
+        <span>Cart</span>
+        <strong data-cart-count>0</strong>
+      </button>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Cold press juice for pickup</p>
+          <h1 id="hero-title">Fresh juice, ready when they arrive.</h1>
+          <p class="hero-text">Bright cold press blends for busy mornings, wellness resets, and easy pickup runs.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#menu">Order now</a>
+            <a class="button ghost" href="#membership">View 5-drink pass</a>
+          </div>
+        </div>
+
+        <div class="hero-stage reveal" aria-hidden="true">
+          <img class="lineup" src="assets/bottle-lineup.jpeg" alt="">
+          <div class="floating-card float-one">
+            <span>Pickup preorders</span>
+            <strong>15 min</strong>
+          </div>
+          <div class="floating-card float-two">
+            <span>Monthly pass</span>
+            <strong>5 drinks</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="strip" aria-label="Store highlights">
+        <div>
+          <strong>100%</strong>
+          <span>fresh juice</span>
+        </div>
+        <div>
+          <strong>5</strong>
+          <span>signature blends</span>
+        </div>
+        <div>
+          <strong>$32</strong>
+          <span>monthly drink pass</span>
+        </div>
+        <div>
+          <strong>Local</strong>
+          <span>pickup friendly</span>
+        </div>
+      </section>
+
+      <section class="section intro reveal" aria-labelledby="story-title">
+        <div>
+          <p class="eyebrow">Fresh. Pure. Nourishing.</p>
+          <h2 id="story-title">Pressed fresh, packed with color, made for joy.</h2>
+        </div>
+        <p>Every bottle is built around crisp fruit, fresh greens, and balanced flavor. Preorder your favorites and pick them up chilled.</p>
+      </section>
+
+      <section class="section menu-section" id="menu" aria-labelledby="menu-title">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Preorder menu</p>
+          <h2 id="menu-title">Signature cold press blends</h2>
+        </div>
+        <div class="menu-grid" data-menu></div>
+      </section>
+
+      <section class="section membership reveal" id="membership" aria-labelledby="membership-title">
+        <div class="membership-copy">
+          <p class="eyebrow">Monthly membership</p>
+          <h2 id="membership-title">Five drinks for the month.</h2>
+          <p>Keep the fridge stocked with a flexible monthly pass for regulars who want their favorite blends on repeat.</p>
+          <ul>
+            <li>Includes any 5 standard juices</li>
+            <li>Redeem for pickup throughout the month</li>
+            <li>Member price: $32</li>
+          </ul>
+        </div>
+        <div class="membership-card">
+          <span class="pass-label">Kay Joy Pass</span>
+          <strong>$32</strong>
+          <p>5 drinks / month</p>
+          <button class="button primary" type="button" data-add-membership>Add membership</button>
+        </div>
+      </section>
+
+      <section class="section pickup" id="pickup" aria-labelledby="pickup-title">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Pickup checkout</p>
+          <h2 id="pickup-title">POS-style preorder details</h2>
+        </div>
+        <form class="checkout reveal" data-checkout-form>
+          <div class="form-grid">
+            <label>
+              Name
+              <input name="name" autocomplete="name" placeholder="Customer name" required>
+            </label>
+            <label>
+              Phone
+              <input name="phone" autocomplete="tel" placeholder="(555) 123-4567" required>
+            </label>
+            <label>
+              Pickup day
+              <select name="day" required>
+                <option value="Today">Today</option>
+                <option value="Tomorrow">Tomorrow</option>
+                <option value="Saturday">Saturday</option>
+              </select>
+            </label>
+            <label>
+              Pickup time
+              <select name="time" required>
+                <option>9:00 AM</option>
+                <option>10:30 AM</option>
+                <option>12:00 PM</option>
+                <option>2:30 PM</option>
+                <option>4:00 PM</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            Notes
+            <textarea name="notes" placeholder="Any pickup notes or substitutions?"></textarea>
+          </label>
+          <div class="checkout-footer">
+            <div>
+              <span>Order total</span>
+              <strong data-inline-total>$0.00</strong>
+            </div>
+            <button class="button primary" type="submit">Place pickup order</button>
+          </div>
+          <p class="fine-print">Payment connection can be added before launch for live card checkout.</p>
+        </form>
+      </section>
+    </main>
+
+    <aside class="cart-panel" aria-label="Shopping cart" data-cart-panel aria-hidden="true">
+      <div class="cart-header">
+        <div>
+          <span class="eyebrow">Pickup cart</span>
+          <h2>Your order</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-cart aria-label="Close cart">x</button>
+      </div>
+      <div class="cart-items" data-cart-items></div>
+      <div class="cart-empty" data-cart-empty>
+        <strong>No drinks yet</strong>
+        <p>Add juices or the monthly pass to start a preorder.</p>
+      </div>
+      <div class="cart-summary">
+        <div><span>Subtotal</span><strong data-subtotal>$0.00</strong></div>
+        <div><span>Tax estimate</span><strong data-tax>$0.00</strong></div>
+        <div class="total"><span>Total</span><strong data-total>$0.00</strong></div>
+        <a class="button primary full" href="#pickup" data-close-cart>Checkout</a>
+      </div>
+    </aside>
+    <div class="scrim" data-scrim></div>
+
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+    <script src="script.js"></script>
+  </body>
+</html>
