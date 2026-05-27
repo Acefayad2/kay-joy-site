@@ -362,6 +362,23 @@ h3 {
   line-height: 1.45;
 }
 
+.ingredients {
+  display: grid;
+  gap: 0.2rem;
+  min-height: 4.2rem;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.ingredients span {
+  color: var(--ink);
+  font-size: 0.74rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
 .price-row,
 .cart-row,
 .checkout-footer,
@@ -621,6 +638,49 @@ textarea {
   transform: translate(-50%, 0);
 }
 
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem clamp(1rem, 5vw, 5rem);
+  background: var(--ink);
+  color: white;
+}
+
+.site-footer p {
+  margin: 0.75rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.site-footer .brand img {
+  box-shadow: none;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.socials a {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 150px;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  font-weight: 900;
+}
+
+.socials span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
 .reveal {
   transform: translateY(24px);
   opacity: 0;
@@ -713,9 +773,18 @@ textarea {
   }
 
   .section-heading,
-  .checkout-footer {
+  .checkout-footer,
+  .site-footer {
     display: grid;
     justify-content: stretch;
+  }
+
+  .socials {
+    justify-content: stretch;
+  }
+
+  .socials a {
+    min-width: 100%;
   }
 }
 
