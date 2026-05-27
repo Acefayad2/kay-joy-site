@@ -43,14 +43,14 @@ const products = [
 
 const membership = {
   id: "kay-joy-pass",
-  name: "Kay Joy Weekly Pass",
+  name: "Kay Joy Monthly Pass",
   price: 35,
-  benefits: "5 drinks for the week",
+  benefits: "5 drinks for the month",
 };
 
 const membershipPickupOptions = {
   "all-at-once": "Pickup preference: all 5 drinks at once",
-  "weekly-visits": "Pickup preference: 1 drink at a time throughout the week",
+  "monthly-visits": "Pickup preference: 1 drink at a time throughout the month",
 };
 
 const state = {
