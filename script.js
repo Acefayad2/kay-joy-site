@@ -1,7 +1,7 @@
 const products = [
   {
     id: "hi-c-spic",
-    name: "Hi C Spic",
+    name: "Hi C Spi C",
     price: 8,
     image: "assets/hi-c-spic.jpeg",
     benefits: "Revitalize, immunity support, citrusy spice",
@@ -43,14 +43,14 @@ const products = [
 
 const membership = {
   id: "kay-joy-pass",
-  name: "Kay Joy Monthly Pass",
-  price: 32,
-  benefits: "5 drinks for the month",
+  name: "Kay Joy Weekly Pass",
+  price: 35,
+  benefits: "5 drinks for the week",
 };
 
 const membershipPickupOptions = {
   "all-at-once": "Pickup preference: all 5 drinks at once",
-  "monthly-visits": "Pickup preference: 1 drink at a time throughout the month",
+  "weekly-visits": "Pickup preference: 1 drink at a time throughout the week",
 };
 
 const state = {
