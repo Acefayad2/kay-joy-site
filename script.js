@@ -54,7 +54,7 @@ const membershipPickupOptions = {
 };
 
 const state = {
-  cart: [],
+  cart: JSON.parse(localStorage.getItem("kayJoyCart") || "[]"),
 };
 
 const money = new Intl.NumberFormat("en-US", {
@@ -146,12 +146,14 @@ function totals() {
 
 function renderCart() {
   const summary = totals();
+  localStorage.setItem("kayJoyCart", JSON.stringify(state.cart));
 
   document.querySelector("[data-cart-count]").textContent = summary.count;
   document.querySelector("[data-subtotal]").textContent = money.format(summary.subtotal);
   document.querySelector("[data-tax]").textContent = money.format(summary.tax);
   document.querySelector("[data-total]").textContent = money.format(summary.total);
-  document.querySelector("[data-inline-total]").textContent = money.format(summary.total);
+  const inlineTotal = document.querySelector("[data-inline-total]");
+  if (inlineTotal) inlineTotal.textContent = money.format(summary.total);
 
   cartEmpty.style.display = state.cart.length ? "none" : "block";
   cartItems.innerHTML = state.cart
@@ -234,27 +236,29 @@ document.addEventListener("click", (event) => {
 
 scrim.addEventListener("click", closeCart);
 
-checkoutForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+if (checkoutForm) {
+  checkoutForm.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-  if (!state.cart.length) {
-    showToast("Add at least one drink or membership before checkout.");
-    openCart();
-    return;
-  }
+    if (!state.cart.length) {
+      showToast("Add at least one drink or membership before checkout.");
+      openCart();
+      return;
+    }
 
-  const form = new FormData(checkoutForm);
-  const name = form.get("name");
-  const day = form.get("day");
-  const time = form.get("time");
-  const orderId = Math.floor(1000 + Math.random() * 9000);
+    const form = new FormData(checkoutForm);
+    const name = form.get("name");
+    const day = form.get("day");
+    const time = form.get("time");
+    const orderId = Math.floor(1000 + Math.random() * 9000);
 
-  showToast(`Order #${orderId} placed for ${name}. Pickup: ${day} at ${time}.`);
-  state.cart = [];
-  checkoutForm.reset();
-  renderCart();
-  closeCart();
-});
+    showToast(`Order #${orderId} placed for ${name}. Pickup: ${day} at ${time}.`);
+    state.cart = [];
+    checkoutForm.reset();
+    renderCart();
+    closeCart();
+  });
+}
 
 renderMenu();
 renderCart();

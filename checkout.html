@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout | Kay Joy Cold Press Juices</title>
+    <meta name="description" content="Kay Joy pickup checkout.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="checkout-page">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Kay Joy home">
+        <img src="assets/kay-joy-logo.jpeg" alt="">
+        <span>Kay Joy</span>
+      </a>
+      <nav aria-label="Checkout navigation">
+        <a href="index.html#menu">Menu</a>
+        <a href="index.html#membership">Membership</a>
+        <a href="index.html">Back to shop</a>
+      </nav>
+    </header>
+
+    <main class="checkout-shell">
+      <section class="checkout-hero">
+        <p class="eyebrow">Secure pickup checkout</p>
+        <h1>Finish your Kay Joy order.</h1>
+        <p>Review your cart, choose a pickup window, and enter payment details to reserve your drinks.</p>
+      </section>
+
+      <form class="checkout-layout" data-real-checkout-form>
+        <section class="checkout-card">
+          <div class="checkout-card-heading">
+            <span>1</span>
+            <div>
+              <h2>Contact</h2>
+              <p>We will use this for pickup confirmation.</p>
+            </div>
+          </div>
+          <div class="form-grid two">
+            <label>
+              Full name
+              <input name="name" autocomplete="name" placeholder="Customer name" required>
+            </label>
+            <label>
+              Phone
+              <input name="phone" autocomplete="tel" placeholder="(555) 123-4567" required>
+            </label>
+            <label>
+              Email
+              <input name="email" autocomplete="email" type="email" placeholder="name@example.com" required>
+            </label>
+            <label>
+              Pickup name
+              <input name="pickupName" placeholder="Name on pickup order">
+            </label>
+          </div>
+        </section>
+
+        <section class="checkout-card">
+          <div class="checkout-card-heading">
+            <span>2</span>
+            <div>
+              <h2>Pickup</h2>
+              <p>Select when the order should be ready.</p>
+            </div>
+          </div>
+          <div class="form-grid two">
+            <label>
+              Pickup day
+              <select name="day" required>
+                <option value="Today">Today</option>
+                <option value="Tomorrow">Tomorrow</option>
+                <option value="Saturday">Saturday</option>
+              </select>
+            </label>
+            <label>
+              Pickup time
+              <select name="time" required>
+                <option>9:00 AM</option>
+                <option>10:30 AM</option>
+                <option>12:00 PM</option>
+                <option>2:30 PM</option>
+                <option>4:00 PM</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            Notes
+            <textarea name="notes" placeholder="Any pickup notes, substitutions, or membership drink choices?"></textarea>
+          </label>
+        </section>
+
+        <section class="checkout-card">
+          <div class="checkout-card-heading">
+            <span>3</span>
+            <div>
+              <h2>Payment</h2>
+              <p>Card fields are ready for a processor connection.</p>
+            </div>
+          </div>
+          <div class="payment-methods" role="radiogroup" aria-label="Payment method">
+            <label>
+              <input type="radio" name="paymentMethod" value="card" checked>
+              <span>Card</span>
+            </label>
+            <label>
+              <input type="radio" name="paymentMethod" value="cashapp">
+              <span>Cash App</span>
+            </label>
+            <label>
+              <input type="radio" name="paymentMethod" value="zelle">
+              <span>Zelle</span>
+            </label>
+          </div>
+          <div class="card-grid">
+            <label>
+              Card number
+              <input inputmode="numeric" name="cardNumber" placeholder="4242 4242 4242 4242">
+            </label>
+            <label>
+              Name on card
+              <input name="cardName" placeholder="Name on card">
+            </label>
+            <label>
+              Expiration
+              <input inputmode="numeric" name="expiration" placeholder="MM / YY">
+            </label>
+            <label>
+              CVC
+              <input inputmode="numeric" name="cvc" placeholder="123">
+            </label>
+          </div>
+          <p class="fine-print">Demo payment screen. Connect Stripe, Square, Clover, Toast, or Shopify before accepting live card payments.</p>
+        </section>
+
+        <aside class="order-review">
+          <div class="order-review-header">
+            <span class="eyebrow">Order summary</span>
+            <a href="index.html#menu">Edit cart</a>
+          </div>
+          <div class="checkout-items" data-checkout-items></div>
+          <div class="cart-empty checkout-empty" data-checkout-empty>
+            <strong>Your cart is empty</strong>
+            <p>Add drinks before checking out.</p>
+            <a class="button primary full" href="index.html#menu">Shop menu</a>
+          </div>
+          <div class="checkout-totals">
+            <div><span>Subtotal</span><strong data-checkout-subtotal>$0.00</strong></div>
+            <div><span>Tax estimate</span><strong data-checkout-tax>$0.00</strong></div>
+            <div><span>Pickup fee</span><strong>Free</strong></div>
+            <div class="total"><span>Total</span><strong data-checkout-total>$0.00</strong></div>
+          </div>
+          <button class="button primary full" type="submit">Place pickup order</button>
+          <p class="fine-print">You will receive a confirmation number after placing the order.</p>
+        </aside>
+      </form>
+    </main>
+
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+    <script src="checkout.js"></script>
+  </body>
+</html>

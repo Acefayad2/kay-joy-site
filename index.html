@@ -123,50 +123,15 @@
       <section class="section pickup" id="pickup" aria-labelledby="pickup-title">
         <div class="section-heading reveal">
           <p class="eyebrow">Pickup checkout</p>
-          <h2 id="pickup-title">POS-style preorder details</h2>
+          <h2 id="pickup-title">Review your cart, then checkout.</h2>
         </div>
-        <form class="checkout reveal" data-checkout-form>
-          <div class="form-grid">
-            <label>
-              Name
-              <input name="name" autocomplete="name" placeholder="Customer name" required>
-            </label>
-            <label>
-              Phone
-              <input name="phone" autocomplete="tel" placeholder="(555) 123-4567" required>
-            </label>
-            <label>
-              Pickup day
-              <select name="day" required>
-                <option value="Today">Today</option>
-                <option value="Tomorrow">Tomorrow</option>
-                <option value="Saturday">Saturday</option>
-              </select>
-            </label>
-            <label>
-              Pickup time
-              <select name="time" required>
-                <option>9:00 AM</option>
-                <option>10:30 AM</option>
-                <option>12:00 PM</option>
-                <option>2:30 PM</option>
-                <option>4:00 PM</option>
-              </select>
-            </label>
+        <div class="checkout-cta reveal">
+          <div>
+            <strong>Ready to finish?</strong>
+            <p>Open your cart, confirm your drinks, then continue to the full pickup checkout page.</p>
           </div>
-          <label>
-            Notes
-            <textarea name="notes" placeholder="Any pickup notes or substitutions?"></textarea>
-          </label>
-          <div class="checkout-footer">
-            <div>
-              <span>Order total</span>
-              <strong data-inline-total>$0.00</strong>
-            </div>
-            <button class="button primary" type="submit">Place pickup order</button>
-          </div>
-          <p class="fine-print">Payment connection can be added before launch for live card checkout.</p>
-        </form>
+          <button class="button primary" type="button" data-open-cart>Open cart</button>
+        </div>
       </section>
     </main>
 
@@ -202,7 +167,7 @@
         <div><span>Subtotal</span><strong data-subtotal>$0.00</strong></div>
         <div><span>Tax estimate</span><strong data-tax>$0.00</strong></div>
         <div class="total"><span>Total</span><strong data-total>$0.00</strong></div>
-        <a class="button primary full" href="#pickup" data-close-cart>Checkout</a>
+        <a class="button primary full" href="checkout.html">Checkout</a>
       </div>
     </aside>
     <div class="scrim" data-scrim></div>
