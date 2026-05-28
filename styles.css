@@ -22,10 +22,16 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(244, 197, 66, 0.22), transparent 34rem),
-    linear-gradient(180deg, #fffaf0 0%, #f6fbef 44%, #fffaf0 100%);
+    linear-gradient(90deg, rgba(23, 49, 40, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(23, 49, 40, 0.025) 1px, transparent 1px),
+    linear-gradient(180deg, #fff8e8 0%, #f4fbeb 42%, #fff4e2 100%);
+  background-size: 54px 54px, 54px 54px, auto;
   color: var(--ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+main {
+  overflow: hidden;
 }
 
 img {
@@ -120,12 +126,47 @@ nav a {
 }
 
 .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
   align-items: center;
   gap: clamp(2rem, 5vw, 5rem);
-  min-height: calc(100vh - 70px);
-  padding: clamp(2.4rem, 5vw, 5.5rem) clamp(1rem, 5vw, 5rem) 3rem;
+  min-height: calc(92vh - 70px);
+  padding: clamp(1.6rem, 4vw, 4rem) clamp(1rem, 5vw, 5rem) 3rem;
+  background:
+    linear-gradient(115deg, rgba(255, 250, 240, 0.98) 0%, rgba(255, 250, 240, 0.9) 36%, rgba(218, 243, 207, 0.72) 36%, rgba(218, 243, 207, 0.46) 66%, rgba(244, 139, 36, 0.22) 66%, rgba(244, 139, 36, 0.08) 100%);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.34), rgba(255, 250, 240, 0.86)),
+    url("assets/hi-c-spic.jpeg") left -110px top -120px / 380px auto no-repeat,
+    url("assets/verde-rush.jpeg") right -120px bottom -130px / 460px auto no-repeat,
+    url("assets/bottle-lineup.jpeg") center bottom / cover no-repeat;
+  opacity: 0.16;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 250, 240, 0.94), rgba(255, 250, 240, 0.2) 68%, rgba(255, 250, 240, 0.72)),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 18px);
+  pointer-events: none;
+}
+
+.hero-copy,
+.hero-stage {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-copy {
@@ -222,18 +263,21 @@ h3 {
 .hero-stage::before {
   content: "";
   position: absolute;
-  inset: 8% 4% -2% 10%;
+  inset: 10% 0 -4% 7%;
   z-index: -1;
-  border-radius: 48% 52% 44% 56%;
-  background: linear-gradient(140deg, rgba(218, 243, 207, 0.9), rgba(244, 197, 66, 0.55), rgba(244, 139, 36, 0.24));
-  animation: pulseBlob 8s ease-in-out infinite;
+  border-radius: 18px;
+  background:
+    linear-gradient(140deg, rgba(218, 243, 207, 0.85), rgba(244, 197, 66, 0.46), rgba(244, 139, 36, 0.22));
+  transform: rotate(-2deg);
+  animation: panelBreath 8s ease-in-out infinite;
 }
 
 .lineup {
   width: min(100%, 700px);
   margin-inline: auto;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
+  border: 10px solid rgba(255, 255, 255, 0.68);
+  border-radius: 20px;
+  box-shadow: 0 30px 90px rgba(23, 49, 40, 0.22);
   animation: bottleRise 900ms ease both;
 }
 
@@ -279,7 +323,8 @@ h3 {
   overflow: hidden;
   border-radius: 12px;
   background: rgba(23, 49, 40, 0.1);
-  box-shadow: var(--shadow);
+  box-shadow: 0 18px 48px rgba(23, 49, 40, 0.13);
+  transform: translateY(-1.6rem);
 }
 
 .strip div {
@@ -304,10 +349,27 @@ h3 {
 }
 
 .intro {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.75fr);
   gap: 2rem;
   align-items: end;
+  margin-top: -1.5rem;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.35)),
+    linear-gradient(135deg, rgba(31, 140, 76, 0.08), rgba(244, 197, 66, 0.16));
+}
+
+.intro::after {
+  content: "";
+  position: absolute;
+  right: clamp(1rem, 5vw, 5rem);
+  bottom: 1.5rem;
+  width: min(260px, 28vw);
+  aspect-ratio: 1;
+  background: url("assets/kay-joy-logo.jpeg") center / contain no-repeat;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
 .section-heading {
@@ -322,6 +384,28 @@ h3 {
   display: grid;
   grid-template-columns: repeat(5, minmax(180px, 1fr));
   gap: 1rem;
+}
+
+.menu-section {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.15), rgba(255, 255, 255, 0.6)),
+    linear-gradient(90deg, rgba(180, 40, 69, 0.07), rgba(31, 140, 76, 0.07));
+}
+
+.menu-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 250, 240, 0.92), rgba(255, 250, 240, 0.74)),
+    url("assets/all-smiles.jpeg") right center / 520px auto no-repeat;
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.menu-section > * {
+  position: relative;
 }
 
 .product-card {
@@ -406,11 +490,26 @@ h3 {
 }
 
 .membership {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
   gap: 2rem;
   align-items: stretch;
-  background: linear-gradient(120deg, rgba(31, 140, 76, 0.1), rgba(244, 139, 36, 0.13));
+  background:
+    linear-gradient(120deg, rgba(23, 49, 40, 0.88), rgba(31, 140, 76, 0.7)),
+    url("assets/verde-rush.jpeg") center / cover no-repeat;
+  color: white;
+}
+
+.membership .eyebrow,
+.membership-copy p,
+.membership-copy ul {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.membership h2,
+.membership-copy li {
+  color: white;
 }
 
 .membership-copy ul {
@@ -432,6 +531,7 @@ h3 {
   background:
     linear-gradient(160deg, rgba(255,255,255,0.92), rgba(255,255,255,0.76)),
     url("assets/verde-rush.jpeg") center / cover;
+  color: var(--ink);
   box-shadow: var(--shadow);
 }
 
@@ -495,6 +595,12 @@ h3 {
   color: var(--muted);
   font-weight: 700;
   line-height: 1.35;
+}
+
+.pickup {
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.78), rgba(246, 251, 239, 0.95)),
+    repeating-linear-gradient(90deg, rgba(31, 140, 76, 0.06) 0 1px, transparent 1px 30px);
 }
 
 .checkout {
@@ -932,6 +1038,11 @@ textarea {
   transition: transform 650ms ease, opacity 650ms ease;
 }
 
+.hero .reveal {
+  transform: none;
+  opacity: 1;
+}
+
 .reveal.is-visible {
   transform: translateY(0);
   opacity: 1;
@@ -944,6 +1055,16 @@ textarea {
   }
   50% {
     transform: rotate(5deg) scale(1.04);
+  }
+}
+
+@keyframes panelBreath {
+  0%,
+  100% {
+    transform: rotate(-2deg) scale(1);
+  }
+  50% {
+    transform: rotate(-1deg) scale(1.02);
   }
 }
 
