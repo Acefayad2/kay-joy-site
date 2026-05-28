@@ -5,7 +5,7 @@ const products = [
     price: 8,
     image: "assets/hi-c-spic.jpeg",
     benefits: "Revitalize, immunity support, citrusy spice",
-    ingredients: "Orange, grapefruit, lemon, ginger, turmeric, cayenne",
+    ingredients: "Naval oranges, grapefruit, lemon, ginger, lime, turmeric",
   },
   {
     id: "joy-bliss",
@@ -13,15 +13,15 @@ const products = [
     price: 8,
     image: "assets/joy-bliss.jpeg",
     benefits: "Invigorate, cellular hydration, recovery",
-    ingredients: "Watermelon, pineapple, lime, mint, coconut water",
+    ingredients: "Seeded watermelon, mint leaves, pineapple, lemon, ginger, lime",
   },
   {
     id: "heartbeat",
     name: "HeartBEET",
-    price: 9,
+    price: 8,
     image: "assets/heartbeat.jpeg",
     benefits: "Energize, natural stamina, glow renewal",
-    ingredients: "Beet, carrot, apple, orange, lemon, ginger",
+    ingredients: "Beetroot, carrots, red apples, lemon, ginger",
   },
   {
     id: "all-smiles",
@@ -29,7 +29,7 @@ const products = [
     price: 8,
     image: "assets/all-smiles.jpeg",
     benefits: "Refresh, antioxidant rich, tropical delight",
-    ingredients: "Strawberry, pineapple, apple, orange, lime",
+    ingredients: "Strawberries, pineapple, cucumber, lemon, ginger",
   },
   {
     id: "verde-rush",
@@ -37,7 +37,7 @@ const products = [
     price: 9,
     image: "assets/verde-rush.jpeg",
     benefits: "Detoxify, cell nourishing, crisp greens",
-    ingredients: "Kale, cucumber, celery, green apple, lemon, ginger",
+    ingredients: "(Org.) kale, cucumbers, celery, cilantro, parsley, green apples, lemon, ginger, agave syrup",
   },
 ];
 
