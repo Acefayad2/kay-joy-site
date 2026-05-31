@@ -25,7 +25,7 @@
       <section class="checkout-hero">
         <p class="eyebrow">Secure pickup checkout</p>
         <h1>Finish your Kay Joy order.</h1>
-        <p>Review your cart, choose a pickup window, and enter payment details to reserve your drinks.</p>
+        <p>Review your cart, choose a pickup window, and pay through Square to reserve your drinks.</p>
         <p class="pickup-location hero-location"><span>Pickup location</span>3901 Calverton Boulevard, Beltsville, Maryland</p>
       </section>
 
@@ -96,43 +96,15 @@
           <div class="checkout-card-heading">
             <span>3</span>
             <div>
-              <h2>Payment</h2>
-              <p>Card fields are ready for a processor connection.</p>
+              <h2>Square payment</h2>
+              <p>After confirming the order, Square will open a secure payment page.</p>
             </div>
           </div>
-          <div class="payment-methods" role="radiogroup" aria-label="Payment method">
-            <label>
-              <input type="radio" name="paymentMethod" value="card" checked>
-              <span>Card</span>
-            </label>
-            <label>
-              <input type="radio" name="paymentMethod" value="cashapp">
-              <span>Cash App</span>
-            </label>
-            <label>
-              <input type="radio" name="paymentMethod" value="zelle">
-              <span>Zelle</span>
-            </label>
+          <div class="square-payment-panel">
+            <strong>Secure checkout handled by Square</strong>
+            <p>Customers will complete payment on a Square-hosted page. Kay Joy will receive the paid order in Square with the pickup details attached.</p>
           </div>
-          <div class="card-grid">
-            <label>
-              Card number
-              <input inputmode="numeric" name="cardNumber" placeholder="4242 4242 4242 4242">
-            </label>
-            <label>
-              Name on card
-              <input name="cardName" placeholder="Name on card">
-            </label>
-            <label>
-              Expiration
-              <input inputmode="numeric" name="expiration" placeholder="MM / YY">
-            </label>
-            <label>
-              CVC
-              <input inputmode="numeric" name="cvc" placeholder="123">
-            </label>
-          </div>
-          <p class="fine-print">Demo payment screen. Connect Stripe, Square, Clover, Toast, or Shopify before accepting live card payments.</p>
+          <p class="fine-print">No card numbers are stored on this website.</p>
         </section>
 
         <aside class="order-review">
@@ -152,8 +124,8 @@
             <div><span>Pickup fee</span><strong>Free</strong></div>
             <div class="total"><span>Total</span><strong data-checkout-total>$0.00</strong></div>
           </div>
-          <button class="button primary full" type="submit">Place pickup order</button>
-          <p class="fine-print">You will receive a confirmation number after placing the order.</p>
+          <button class="button primary full" type="submit" data-checkout-submit>Pay with Square</button>
+          <p class="fine-print" data-checkout-status>Square will confirm payment after checkout.</p>
         </aside>
       </form>
     </main>

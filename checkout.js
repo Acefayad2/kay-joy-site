@@ -8,6 +8,8 @@ const items = document.querySelector("[data-checkout-items]");
 const empty = document.querySelector("[data-checkout-empty]");
 const form = document.querySelector("[data-real-checkout-form]");
 const toast = document.querySelector("[data-toast]");
+const submitButton = document.querySelector("[data-checkout-submit]");
+const statusLine = document.querySelector("[data-checkout-status]");
 
 function totals() {
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -41,7 +43,13 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => toast.classList.remove("is-open"), 3600);
 }
 
-form.addEventListener("submit", (event) => {
+function setLoading(isLoading) {
+  submitButton.disabled = isLoading;
+  submitButton.textContent = isLoading ? "Opening Square..." : "Pay with Square";
+  statusLine.textContent = isLoading ? "Creating a secure Square checkout link." : "Square will confirm payment after checkout.";
+}
+
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   if (!cart.length) {
@@ -50,19 +58,45 @@ form.addEventListener("submit", (event) => {
   }
 
   const formData = new FormData(form);
-  const name = formData.get("name");
-  const day = formData.get("day");
-  const time = formData.get("time");
-  const orderId = Math.floor(1000 + Math.random() * 9000);
+  setLoading(true);
 
-  localStorage.removeItem("kayJoyCart");
-  showToast(`Order #${orderId} placed for ${name}. Pickup: ${day} at ${time} at 3901 Calverton Boulevard, Beltsville, Maryland.`);
-  form.reset();
-  items.innerHTML = "";
-  empty.style.display = "grid";
-  document.querySelector("[data-checkout-subtotal]").textContent = "$0.00";
-  document.querySelector("[data-checkout-tax]").textContent = "$0.00";
-  document.querySelector("[data-checkout-total]").textContent = "$0.00";
+  try {
+    const response = await fetch("/.netlify/functions/create-square-checkout", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        cart,
+        customer: {
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+          email: formData.get("email"),
+        },
+        pickup: {
+          name: formData.get("pickupName"),
+          day: formData.get("day"),
+          time: formData.get("time"),
+          notes: formData.get("notes"),
+        },
+      }),
+    });
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok || !payload.checkoutUrl) {
+      throw new Error(payload.error || "Square checkout is not available yet.");
+    }
+
+    sessionStorage.setItem("kayJoyLastOrder", JSON.stringify({
+      orderId: payload.orderId,
+      pickupDay: formData.get("day"),
+      pickupTime: formData.get("time"),
+    }));
+    localStorage.removeItem("kayJoyCart");
+    window.location.href = payload.checkoutUrl;
+  } catch (error) {
+    showToast(error.message);
+    setLoading(false);
+    statusLine.textContent = error.message;
+  }
 });
 
 renderCheckout();
