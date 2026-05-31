@@ -1032,6 +1032,142 @@ textarea {
   font-weight: 750;
 }
 
+.about-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.78fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  min-height: calc(88vh - 70px);
+  padding: clamp(3rem, 6vw, 6rem) clamp(1rem, 5vw, 5rem);
+  overflow: hidden;
+  background:
+    linear-gradient(110deg, rgba(255, 250, 240, 0.96), rgba(246, 251, 239, 0.7)),
+    url("assets/bottle-lineup.jpeg") right bottom / 720px auto no-repeat;
+}
+
+.about-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 250, 240, 0.95), rgba(255, 250, 240, 0.68) 58%, rgba(255, 250, 240, 0.38)),
+    repeating-linear-gradient(135deg, rgba(31, 140, 76, 0.07) 0 1px, transparent 1px 20px);
+}
+
+.about-copy,
+.about-photo-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.about-copy {
+  max-width: 720px;
+}
+
+.about-copy h1 {
+  max-width: 10ch;
+}
+
+.about-copy p:not(.eyebrow),
+.story-text p,
+.values-section p {
+  color: var(--muted);
+  font-size: clamp(1rem, 1.5vw, 1.14rem);
+  line-height: 1.7;
+}
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.6rem;
+}
+
+.about-photo-wrap {
+  justify-self: center;
+  width: min(100%, 420px);
+  padding: 0.8rem;
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(244, 197, 66, 0.5), rgba(218, 243, 207, 0.7)),
+    white;
+  box-shadow: 0 30px 90px rgba(23, 49, 40, 0.2);
+  transform: rotate(1.5deg);
+}
+
+.about-photo-wrap img {
+  width: 100%;
+  max-height: 620px;
+  border-radius: 18px;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.about-story {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(280px, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: clamp(4rem, 8vw, 7rem) clamp(1rem, 5vw, 5rem);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.44)),
+    linear-gradient(135deg, rgba(180, 40, 69, 0.07), rgba(31, 140, 76, 0.08));
+}
+
+.story-text {
+  display: grid;
+  gap: 1rem;
+}
+
+.values-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 0 clamp(1rem, 5vw, 5rem) clamp(4rem, 8vw, 7rem);
+}
+
+.values-section article {
+  min-height: 260px;
+  padding: 1.4rem;
+  border: 1px solid rgba(23, 49, 40, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 44px rgba(23, 49, 40, 0.1);
+}
+
+.values-section span {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 1.3rem;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--ink);
+  font-weight: 950;
+}
+
+.about-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 5rem);
+  background:
+    linear-gradient(120deg, rgba(23, 49, 40, 0.9), rgba(31, 140, 76, 0.72)),
+    url("assets/all-smiles.jpeg") center / cover no-repeat;
+  color: white;
+}
+
+.about-cta .eyebrow,
+.about-cta h2 {
+  color: white;
+}
+
+.about-cta h2 {
+  margin-bottom: 0;
+}
+
 .reveal {
   transform: translateY(24px);
   opacity: 0;
@@ -1093,11 +1229,14 @@ textarea {
   .hero,
   .intro,
   .membership,
-  .checkout-layout {
+  .checkout-layout,
+  .about-hero,
+  .about-story {
     grid-template-columns: 1fr;
   }
 
-  .menu-grid {
+  .menu-grid,
+  .values-section {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1129,12 +1268,17 @@ textarea {
     min-height: auto;
   }
 
+  .about-hero {
+    min-height: auto;
+  }
+
   h1 {
     max-width: 11ch;
   }
 
   .strip,
   .menu-grid,
+  .values-section,
   .form-grid,
   .form-grid.two,
   .card-grid,
@@ -1151,6 +1295,7 @@ textarea {
   .section-heading,
   .checkout-footer,
   .checkout-cta,
+  .about-cta,
   .site-footer {
     display: grid;
     justify-content: stretch;
