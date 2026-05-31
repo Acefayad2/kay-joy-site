@@ -1,11 +1,11 @@
 const PRODUCTS = {
-  "hi-c-spic": { name: "Hi C Spi C", price: 8 },
-  "joy-bliss": { name: "Joy Bliss", price: 8 },
-  heartbeat: { name: "HeartBEET", price: 8 },
-  "all-smiles": { name: "All Smiles", price: 8 },
-  "verde-rush": { name: "Verde' Rush", price: 9 },
-  "kay-joy-pass-all-at-once": { name: "Kay Joy Monthly Pass", price: 35 },
-  "kay-joy-pass-monthly-visits": { name: "Kay Joy Monthly Pass", price: 35 },
+  "hi-c-spic": { name: "Hi C Spi C", price: 8, note: "Naval oranges, grapefruit, lemon, ginger, lime, turmeric" },
+  "joy-bliss": { name: "Joy Bliss", price: 8, note: "Seeded watermelon, mint leaves, pineapple, lemon, ginger, lime" },
+  heartbeat: { name: "HeartBEET", price: 8, note: "Beetroot, carrots, red apples, lemon, ginger" },
+  "all-smiles": { name: "All Smiles", price: 8, note: "Strawberries, pineapple, cucumber, lemon, ginger" },
+  "verde-rush": { name: "Verde' Rush", price: 9, note: "(Org.) kale, cucumbers, celery, cilantro, parsley, green apples, lemon, ginger, agave syrup" },
+  "kay-joy-pass-all-at-once": { name: "Kay Joy Monthly Pass", price: 35, note: "5 drinks for the month. Pickup preference: all 5 drinks at once" },
+  "kay-joy-pass-monthly-visits": { name: "Kay Joy Monthly Pass", price: 35, note: "5 drinks for the month. Pickup preference: 1 drink at a time throughout the month" },
 };
 
 const PICKUP_ADDRESS = "3901 Calverton Boulevard, Beltsville, Maryland";
@@ -36,6 +36,7 @@ function getCartDetails(cart) {
     const quantity = Math.max(1, Math.min(20, Number.parseInt(cartItem.quantity, 10) || 1));
     return {
       name: product.name,
+      note: product.note,
       quantity,
       price: product.price,
       total: product.price * quantity,
@@ -51,6 +52,28 @@ function getCartDetails(cart) {
     taxCents,
     totalCents,
   };
+}
+
+async function squareRequest(path, accessToken, payload) {
+  const squareResponse = await fetch(`${SQUARE_API_HOST}${path}`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+      "Square-Version": SQUARE_VERSION,
+    },
+    body: JSON.stringify(payload),
+  });
+  const squarePayload = await squareResponse.json();
+
+  if (!squareResponse.ok) {
+    const error = new Error(squarePayload.errors?.[0]?.detail || squarePayload.errors?.[0]?.code || "Square request failed.");
+    error.statusCode = squareResponse.status;
+    error.square = squarePayload.errors;
+    throw error;
+  }
+
+  return squarePayload;
 }
 
 exports.handler = async (event) => {
@@ -91,39 +114,55 @@ exports.handler = async (event) => {
       `Maryland sales tax: $${(details.taxCents / 100).toFixed(2)}`,
     ].filter(Boolean).join(" | ");
 
-    const squareResponse = await fetch(`${SQUARE_API_HOST}/v2/payments`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-        "Square-Version": SQUARE_VERSION,
+    const orderPayload = await squareRequest("/v2/orders", accessToken, {
+      idempotency_key: crypto.randomUUID(),
+      order: {
+        location_id: locationId,
+        source: { name: "Kay Joy website checkout" },
+        line_items: details.lines.map((item) => ({
+          name: item.name,
+          note: item.note,
+          quantity: String(item.quantity),
+          base_price_money: {
+            amount: Math.round(item.price * 100),
+            currency: "USD",
+          },
+        })),
+        taxes: [
+          {
+            uid: "maryland-sales-tax",
+            name: "Maryland sales tax",
+            percentage: "6",
+            scope: "ORDER",
+          },
+        ],
       },
-      body: JSON.stringify({
+    });
+    const order = orderPayload.order;
+    const orderTotalCents = order?.total_money?.amount || details.totalCents;
+
+    const squarePayload = await squareRequest("/v2/payments", accessToken, {
         idempotency_key: crypto.randomUUID(),
         source_id: sourceId,
         location_id: locationId,
+        order_id: order?.id,
         amount_money: {
-          amount: details.totalCents,
+          amount: orderTotalCents,
           currency: "USD",
         },
         buyer_email_address: clean(customer.email),
         note: note.slice(0, 500),
-      }),
     });
-
-    const squarePayload = await squareResponse.json();
-    if (!squareResponse.ok) {
-      return response(squareResponse.status, {
-        error: squarePayload.errors?.[0]?.detail || squarePayload.errors?.[0]?.code || "Square could not complete the payment.",
-        square: squarePayload.errors,
-      });
-    }
 
     return response(200, {
       paymentId: squarePayload.payment?.id,
+      orderId: order?.id,
       receiptUrl: squarePayload.payment?.receipt_url,
     });
   } catch (error) {
-    return response(500, { error: error.message || "Unable to complete Square payment." });
+    return response(error.statusCode || 500, {
+      error: error.message || "Unable to complete Square payment.",
+      square: error.square,
+    });
   }
 };
