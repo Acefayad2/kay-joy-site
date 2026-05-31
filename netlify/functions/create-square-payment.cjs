@@ -73,6 +73,7 @@ exports.handler = async (event) => {
 
     const customer = body.customer || {};
     const pickup = body.pickup || {};
+    const billing = body.billing || {};
     const details = getCartDetails(cart);
     const itemSummary = details.lines
       .map((item) => `${item.quantity}x ${item.name}`)
@@ -86,6 +87,7 @@ exports.handler = async (event) => {
       customer.email ? `Email: ${clean(customer.email)}` : "",
       pickup.name ? `Pickup name: ${clean(pickup.name)}` : "",
       pickup.notes ? `Notes: ${clean(pickup.notes)}` : "",
+      billing.postalCode ? `Billing ZIP: ${clean(billing.postalCode)}` : "",
     ].filter(Boolean).join(" | ");
 
     const squareResponse = await fetch(`${SQUARE_API_HOST}/v2/payments`, {

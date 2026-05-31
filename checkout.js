@@ -67,6 +67,34 @@ function paymentDetails(formData) {
       time: formData.get("time"),
       notes: formData.get("notes"),
     },
+    billing: {
+      name: formData.get("billingName"),
+      address: formData.get("billingAddress"),
+      city: formData.get("billingCity"),
+      state: formData.get("billingState"),
+      postalCode: formData.get("billingPostalCode"),
+    },
+  };
+}
+
+function squareVerificationDetails(formData) {
+  const summary = totals();
+  return {
+    amount: summary.total.toFixed(2),
+    billingContact: {
+      givenName: String(formData.get("billingName") || formData.get("name") || "").trim(),
+      addressLines: String(formData.get("billingAddress") || "").trim()
+        ? [String(formData.get("billingAddress")).trim()]
+        : [],
+      city: String(formData.get("billingCity") || "").trim(),
+      state: String(formData.get("billingState") || "").trim().toUpperCase(),
+      postalCode: String(formData.get("billingPostalCode") || "").trim(),
+      countryCode: "US",
+      email: String(formData.get("email") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+    },
+    currencyCode: "USD",
+    intent: "CHARGE",
   };
 }
 
@@ -130,7 +158,7 @@ form.addEventListener("submit", async (event) => {
   setLoading(true);
 
   try {
-    const tokenResult = await card.tokenize();
+    const tokenResult = await card.tokenize(squareVerificationDetails(formData));
     if (tokenResult.status !== "OK") {
       const message = tokenResult.errors?.[0]?.message || "Please check the card details.";
       throw new Error(message);

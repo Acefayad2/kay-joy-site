@@ -108,6 +108,28 @@
               <p class="fine-print" data-card-status>Loading secure card fields...</p>
             </div>
           </div>
+          <div class="billing-grid">
+            <label>
+              Billing name
+              <input name="billingName" autocomplete="cc-name" placeholder="Name on card" required>
+            </label>
+            <label>
+              ZIP code
+              <input name="billingPostalCode" autocomplete="postal-code" inputmode="numeric" placeholder="20705" required>
+            </label>
+            <label>
+              Billing address
+              <input name="billingAddress" autocomplete="billing street-address" placeholder="Street address">
+            </label>
+            <label>
+              City
+              <input name="billingCity" autocomplete="billing address-level2" placeholder="Beltsville">
+            </label>
+            <label>
+              State
+              <input name="billingState" autocomplete="billing address-level1" placeholder="MD" maxlength="2">
+            </label>
+          </div>
           <p class="fine-print">No card numbers are stored on this website.</p>
         </section>
 
