@@ -102,8 +102,6 @@ exports.handler = async (event) => {
     const lineItems = cartToLineItems(cart);
     const customer = body.customer || {};
     const pickup = body.pickup || {};
-    const prePopulatedData = {};
-    if (clean(customer.email)) prePopulatedData.buyer_email = clean(customer.email);
     const pickupSummary = [
       `Pickup: ${clean(pickup.day, "Selected day")} at ${clean(pickup.time, "selected time")}`,
       `Pickup address: ${PICKUP_ADDRESS}`,
@@ -142,7 +140,6 @@ exports.handler = async (event) => {
           ask_for_shipping_address: false,
           redirect_url: `${siteUrl}/success.html`,
         },
-        pre_populated_data: prePopulatedData,
       }),
     });
 
