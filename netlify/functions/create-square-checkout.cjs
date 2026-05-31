@@ -38,6 +38,10 @@ const PRODUCTS = {
 
 const PICKUP_ADDRESS = "3901 Calverton Boulevard, Beltsville, Maryland";
 const SQUARE_VERSION = "2026-05-20";
+const SQUARE_ENVIRONMENT = process.env.SQUARE_ENVIRONMENT === "sandbox" ? "sandbox" : "production";
+const SQUARE_API_HOST = SQUARE_ENVIRONMENT === "sandbox"
+  ? "https://connect.squareupsandbox.com"
+  : "https://connect.squareup.com";
 
 function response(statusCode, payload) {
   return {
@@ -111,7 +115,7 @@ exports.handler = async (event) => {
       pickup.notes ? `Notes: ${clean(pickup.notes)}` : "",
     ].filter(Boolean).join(" | ");
 
-    const squareResponse = await fetch("https://connect.squareup.com/v2/online-checkout/payment-links", {
+    const squareResponse = await fetch(`${SQUARE_API_HOST}/v2/online-checkout/payment-links`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${accessToken}`,
