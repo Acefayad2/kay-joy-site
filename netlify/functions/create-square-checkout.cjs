@@ -104,7 +104,6 @@ exports.handler = async (event) => {
     const pickup = body.pickup || {};
     const prePopulatedData = {};
     if (clean(customer.email)) prePopulatedData.buyer_email = clean(customer.email);
-    if (clean(customer.phone)) prePopulatedData.buyer_phone_number = clean(customer.phone);
     const pickupSummary = [
       `Pickup: ${clean(pickup.day, "Selected day")} at ${clean(pickup.time, "selected time")}`,
       `Pickup address: ${PICKUP_ADDRESS}`,
