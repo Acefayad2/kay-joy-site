@@ -26,12 +26,12 @@ const PRODUCTS = {
   },
   "kay-joy-pass-all-at-once": {
     name: "Kay Joy Monthly Pass",
-    price: 35,
+    price: 38,
     note: "5 drinks for the month. Pickup preference: all 5 drinks at once",
   },
   "kay-joy-pass-monthly-visits": {
     name: "Kay Joy Monthly Pass",
-    price: 35,
+    price: 38,
     note: "5 drinks for the month. Pickup preference: 1 drink at a time throughout the month",
   },
 };

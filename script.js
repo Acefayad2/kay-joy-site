@@ -44,7 +44,7 @@ const products = [
 const membership = {
   id: "kay-joy-pass",
   name: "Kay Joy Monthly Pass",
-  price: 35,
+  price: 38,
   benefits: "5 drinks for the month",
 };
 
