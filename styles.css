@@ -639,6 +639,25 @@ h3 {
   line-height: 1.6;
 }
 
+.pickup-location {
+  display: inline-grid;
+  gap: 0.2rem;
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(31, 140, 76, 0.16);
+  border-radius: 8px;
+  background: rgba(218, 243, 207, 0.42);
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.pickup-location span {
+  color: var(--leaf);
+  font-size: 0.74rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -706,6 +725,14 @@ textarea {
   color: var(--muted);
   font-size: 1.1rem;
   line-height: 1.65;
+}
+
+.checkout-hero .hero-location {
+  width: max-content;
+  max-width: 100%;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .checkout-layout {

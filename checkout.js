@@ -56,7 +56,7 @@ form.addEventListener("submit", (event) => {
   const orderId = Math.floor(1000 + Math.random() * 9000);
 
   localStorage.removeItem("kayJoyCart");
-  showToast(`Order #${orderId} placed for ${name}. Pickup: ${day} at ${time}.`);
+  showToast(`Order #${orderId} placed for ${name}. Pickup: ${day} at ${time} at 3901 Calverton Boulevard, Beltsville, Maryland.`);
   form.reset();
   items.innerHTML = "";
   empty.style.display = "grid";

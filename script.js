@@ -252,7 +252,7 @@ if (checkoutForm) {
     const time = form.get("time");
     const orderId = Math.floor(1000 + Math.random() * 9000);
 
-    showToast(`Order #${orderId} placed for ${name}. Pickup: ${day} at ${time}.`);
+    showToast(`Order #${orderId} placed for ${name}. Pickup: ${day} at ${time} at 3901 Calverton Boulevard, Beltsville, Maryland.`);
     state.cart = [];
     checkoutForm.reset();
     renderCart();
