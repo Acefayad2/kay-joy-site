@@ -61,6 +61,7 @@ const money = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
+const TAX_RATE = 0.06;
 
 const menu = document.querySelector("[data-menu]");
 const cartPanel = document.querySelector("[data-cart-panel]");
@@ -135,7 +136,7 @@ function updateQuantity(id, change) {
 
 function totals() {
   const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const tax = subtotal * 0.07;
+  const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
   return {
     subtotal,
     tax,

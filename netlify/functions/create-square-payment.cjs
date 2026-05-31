@@ -14,6 +14,7 @@ const SQUARE_ENVIRONMENT = process.env.SQUARE_ENVIRONMENT === "sandbox" ? "sandb
 const SQUARE_API_HOST = SQUARE_ENVIRONMENT === "sandbox"
   ? "https://connect.squareupsandbox.com"
   : "https://connect.squareup.com";
+const TAX_RATE = 0.06;
 
 function response(statusCode, payload) {
   return {
@@ -41,13 +42,14 @@ function getCartDetails(cart) {
     };
   });
 
-  const subtotal = lines.reduce((sum, item) => sum + item.total, 0);
-  const tax = subtotal * 0.07;
+  const subtotalCents = lines.reduce((sum, item) => sum + Math.round(item.total * 100), 0);
+  const taxCents = Math.round(subtotalCents * TAX_RATE);
+  const totalCents = subtotalCents + taxCents;
   return {
     lines,
-    subtotal,
-    tax,
-    total: subtotal + tax,
+    subtotalCents,
+    taxCents,
+    totalCents,
   };
 }
 
@@ -73,7 +75,6 @@ exports.handler = async (event) => {
 
     const customer = body.customer || {};
     const pickup = body.pickup || {};
-    const billing = body.billing || {};
     const details = getCartDetails(cart);
     const itemSummary = details.lines
       .map((item) => `${item.quantity}x ${item.name}`)
@@ -87,7 +88,7 @@ exports.handler = async (event) => {
       customer.email ? `Email: ${clean(customer.email)}` : "",
       pickup.name ? `Pickup name: ${clean(pickup.name)}` : "",
       pickup.notes ? `Notes: ${clean(pickup.notes)}` : "",
-      billing.postalCode ? `Billing ZIP: ${clean(billing.postalCode)}` : "",
+      `Maryland sales tax: $${(details.taxCents / 100).toFixed(2)}`,
     ].filter(Boolean).join(" | ");
 
     const squareResponse = await fetch(`${SQUARE_API_HOST}/v2/payments`, {
@@ -102,9 +103,10 @@ exports.handler = async (event) => {
         source_id: sourceId,
         location_id: locationId,
         amount_money: {
-          amount: Math.round(details.total * 100),
+          amount: details.totalCents,
           currency: "USD",
         },
+        buyer_email_address: clean(customer.email),
         note: note.slice(0, 500),
       }),
     });

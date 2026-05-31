@@ -11,13 +11,14 @@ const toast = document.querySelector("[data-toast]");
 const submitButton = document.querySelector("[data-checkout-submit]");
 const statusLine = document.querySelector("[data-checkout-status]");
 const cardStatus = document.querySelector("[data-card-status]");
+const TAX_RATE = 0.06;
 
 let card;
 let squareReady = false;
 
 function totals() {
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const tax = subtotal * 0.07;
+  const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
   return { subtotal, tax, total: subtotal + tax };
 }
 
@@ -67,13 +68,6 @@ function paymentDetails(formData) {
       time: formData.get("time"),
       notes: formData.get("notes"),
     },
-    billing: {
-      name: formData.get("billingName"),
-      address: formData.get("billingAddress"),
-      city: formData.get("billingCity"),
-      state: formData.get("billingState"),
-      postalCode: formData.get("billingPostalCode"),
-    },
   };
 }
 
@@ -81,18 +75,6 @@ function squareVerificationDetails(formData) {
   const summary = totals();
   return {
     amount: summary.total.toFixed(2),
-    billingContact: {
-      givenName: String(formData.get("billingName") || formData.get("name") || "").trim(),
-      addressLines: String(formData.get("billingAddress") || "").trim()
-        ? [String(formData.get("billingAddress")).trim()]
-        : [],
-      city: String(formData.get("billingCity") || "").trim(),
-      state: String(formData.get("billingState") || "").trim().toUpperCase(),
-      postalCode: String(formData.get("billingPostalCode") || "").trim(),
-      countryCode: "US",
-      email: String(formData.get("email") || "").trim(),
-      phone: String(formData.get("phone") || "").trim(),
-    },
     currencyCode: "USD",
     intent: "CHARGE",
   };

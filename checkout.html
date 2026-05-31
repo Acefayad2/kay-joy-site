@@ -35,7 +35,7 @@
             <span>1</span>
             <div>
               <h2>Contact</h2>
-              <p>We will use this for pickup confirmation.</p>
+              <p>We will use this for pickup confirmation and the Square receipt.</p>
             </div>
           </div>
           <div class="form-grid two">
@@ -102,33 +102,11 @@
           </div>
           <div class="square-payment-panel">
             <strong>Secure payment handled by Square</strong>
-            <p>Card details are encrypted by Square and are never stored on this website.</p>
+            <p>Card details are encrypted by Square. A receipt will be sent to the email above after payment.</p>
             <div class="embedded-card-shell">
               <div id="card-container" aria-label="Square card payment fields"></div>
               <p class="fine-print" data-card-status>Loading secure card fields...</p>
             </div>
-          </div>
-          <div class="billing-grid">
-            <label>
-              Billing name
-              <input name="billingName" autocomplete="cc-name" placeholder="Name on card" required>
-            </label>
-            <label>
-              ZIP code
-              <input name="billingPostalCode" autocomplete="postal-code" inputmode="numeric" placeholder="20705" required>
-            </label>
-            <label>
-              Billing address
-              <input name="billingAddress" autocomplete="billing street-address" placeholder="Street address">
-            </label>
-            <label>
-              City
-              <input name="billingCity" autocomplete="billing address-level2" placeholder="Beltsville">
-            </label>
-            <label>
-              State
-              <input name="billingState" autocomplete="billing address-level1" placeholder="MD" maxlength="2">
-            </label>
           </div>
           <p class="fine-print">No card numbers are stored on this website.</p>
         </section>
@@ -146,8 +124,9 @@
           </div>
           <div class="checkout-totals">
             <div><span>Subtotal</span><strong data-checkout-subtotal>$0.00</strong></div>
-            <div><span>Tax estimate</span><strong data-checkout-tax>$0.00</strong></div>
-            <div><span>Pickup fee</span><strong>Free</strong></div>
+            <div><span>Maryland sales tax (6%)</span><strong data-checkout-tax>$0.00</strong></div>
+            <div><span>Pickup fee</span><strong>$0.00</strong></div>
+            <div><span>Online payment fee</span><strong>$0.00</strong></div>
             <div class="total"><span>Total</span><strong data-checkout-total>$0.00</strong></div>
           </div>
           <button class="button primary full" type="submit" data-checkout-submit>Complete payment</button>

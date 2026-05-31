@@ -42,6 +42,7 @@ const SQUARE_ENVIRONMENT = process.env.SQUARE_ENVIRONMENT === "sandbox" ? "sandb
 const SQUARE_API_HOST = SQUARE_ENVIRONMENT === "sandbox"
   ? "https://connect.squareupsandbox.com"
   : "https://connect.squareup.com";
+const TAX_RATE_PERCENT = "6";
 
 function response(statusCode, payload) {
   return {
@@ -130,8 +131,8 @@ exports.handler = async (event) => {
           taxes: [
             {
               uid: "sales-tax",
-              name: "Sales tax estimate",
-              percentage: "7",
+              name: "Maryland sales tax",
+              percentage: TAX_RATE_PERCENT,
               scope: "ORDER",
             },
           ],
