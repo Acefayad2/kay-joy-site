@@ -97,12 +97,16 @@
             <span>3</span>
             <div>
               <h2>Square payment</h2>
-              <p>After confirming the order, Square will open a secure payment page.</p>
+              <p>Enter card details below to complete payment securely with Square.</p>
             </div>
           </div>
           <div class="square-payment-panel">
-            <strong>Secure checkout handled by Square</strong>
-            <p>Customers will complete payment on a Square-hosted page. Kay Joy will receive the paid order in Square with the pickup details attached.</p>
+            <strong>Secure payment handled by Square</strong>
+            <p>Card details are encrypted by Square and are never stored on this website.</p>
+            <div class="embedded-card-shell">
+              <div id="card-container" aria-label="Square card payment fields"></div>
+              <p class="fine-print" data-card-status>Loading secure card fields...</p>
+            </div>
           </div>
           <p class="fine-print">No card numbers are stored on this website.</p>
         </section>
@@ -124,13 +128,14 @@
             <div><span>Pickup fee</span><strong>Free</strong></div>
             <div class="total"><span>Total</span><strong data-checkout-total>$0.00</strong></div>
           </div>
-          <button class="button primary full" type="submit" data-checkout-submit>Pay with Square</button>
-          <p class="fine-print" data-checkout-status>Square will confirm payment after checkout.</p>
+          <button class="button primary full" type="submit" data-checkout-submit>Complete payment</button>
+          <p class="fine-print" data-checkout-status>Square will confirm payment on this page.</p>
         </aside>
       </form>
     </main>
 
     <div class="toast" role="status" aria-live="polite" data-toast></div>
+    <script src="https://web.squarecdn.com/v1/square.js"></script>
     <script src="checkout.js"></script>
   </body>
 </html>

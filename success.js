@@ -1,5 +1,7 @@
 const details = document.querySelector("[data-success-details]");
+const receiptLink = document.querySelector("[data-receipt-link]");
 const lastOrder = JSON.parse(sessionStorage.getItem("kayJoyLastOrder") || "{}");
+const receiptUrl = sessionStorage.getItem("kayJoyReceiptUrl");
 
 if (lastOrder.pickupDay && lastOrder.pickupTime) {
   const pickup = document.createElement("div");
@@ -19,4 +21,9 @@ if (lastOrder.pickupDay && lastOrder.pickupTime) {
     order.append(orderLabel, orderValue);
     details.append(order);
   }
+}
+
+if (receiptUrl) {
+  receiptLink.href = receiptUrl;
+  receiptLink.hidden = false;
 }
