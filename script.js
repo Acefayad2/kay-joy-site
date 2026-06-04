@@ -34,7 +34,7 @@ const products = [
   {
     id: "verde-rush",
     name: "Verde' Rush",
-    price: 9,
+    price: 8,
     image: "assets/verde-rush.jpeg",
     benefits: "Detoxify, cell nourishing, crisp greens",
     ingredients: "(Org.) kale, cucumbers, celery, cilantro, parsley, green apples, lemon, ginger, agave syrup",

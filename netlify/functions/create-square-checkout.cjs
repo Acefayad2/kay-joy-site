@@ -21,7 +21,7 @@ const PRODUCTS = {
   },
   "verde-rush": {
     name: "Verde' Rush",
-    price: 9,
+    price: 8,
     note: "(Org.) kale, cucumbers, celery, cilantro, parsley, green apples, lemon, ginger, agave syrup",
   },
   "kay-joy-pass-all-at-once": {

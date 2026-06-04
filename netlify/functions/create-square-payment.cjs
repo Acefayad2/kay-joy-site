@@ -3,7 +3,7 @@ const PRODUCTS = {
   "joy-bliss": { name: "Joy Bliss", price: 8, note: "Seeded watermelon, mint leaves, pineapple, lemon, ginger, lime" },
   heartbeat: { name: "HeartBEET", price: 8, note: "Beetroot, carrots, red apples, lemon, ginger" },
   "all-smiles": { name: "All Smiles", price: 8, note: "Strawberries, pineapple, cucumber, lemon, ginger" },
-  "verde-rush": { name: "Verde' Rush", price: 9, note: "(Org.) kale, cucumbers, celery, cilantro, parsley, green apples, lemon, ginger, agave syrup" },
+  "verde-rush": { name: "Verde' Rush", price: 8, note: "(Org.) kale, cucumbers, celery, cilantro, parsley, green apples, lemon, ginger, agave syrup" },
   "kay-joy-pass-all-at-once": { name: "Kay Joy Monthly Pass", price: 37, note: "5 drinks for the month. Pickup preference: all 5 drinks at once" },
   "kay-joy-pass-monthly-visits": { name: "Kay Joy Monthly Pass", price: 37, note: "5 drinks for the month. Pickup preference: 1 drink at a time throughout the month" },
 };
