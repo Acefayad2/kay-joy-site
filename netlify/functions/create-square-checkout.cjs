@@ -56,6 +56,18 @@ function clean(value, fallback = "") {
   return String(value || fallback).trim().slice(0, 240);
 }
 
+function validatePickup(pickup) {
+  const day = clean(pickup.day);
+  const time = clean(pickup.time);
+  const allowedTimes = new Set(["12:00 PM", "4:00 PM"]);
+
+  if (day !== "Saturday" || !allowedTimes.has(time)) {
+    const error = new Error("Pickup is only available on Saturday at 12:00 PM or 4:00 PM.");
+    error.statusCode = 400;
+    throw error;
+  }
+}
+
 function cartToLineItems(cart) {
   return cart.map((cartItem) => {
     const product = PRODUCTS[cartItem.id];
@@ -103,6 +115,7 @@ exports.handler = async (event) => {
     const lineItems = cartToLineItems(cart);
     const customer = body.customer || {};
     const pickup = body.pickup || {};
+    validatePickup(pickup);
     const pickupSummary = [
       `Pickup: ${clean(pickup.day, "Selected day")} at ${clean(pickup.time, "selected time")}`,
       `Pickup address: ${PICKUP_ADDRESS}`,
@@ -157,6 +170,6 @@ exports.handler = async (event) => {
       orderId: squarePayload.payment_link?.order_id,
     });
   } catch (error) {
-    return response(500, { error: error.message || "Unable to create Square checkout." });
+    return response(error.statusCode || 500, { error: error.message || "Unable to create Square checkout." });
   }
 };
