@@ -304,11 +304,6 @@ h3 {
   font-size: 1.35rem;
 }
 
-.float-one {
-  left: 0;
-  bottom: 12%;
-}
-
 .float-two {
   right: 0;
   top: 10%;
@@ -1382,7 +1377,6 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  .float-one,
   .float-two {
     position: static;
     margin: 0.8rem 0 0;
