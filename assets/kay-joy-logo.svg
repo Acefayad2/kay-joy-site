@@ -1,0 +1,41 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Kay Joy Cold Press Juices logo</title>
+  <desc id="desc">A modern green K leaf mark with a golden juice drop.</desc>
+  <defs>
+    <linearGradient id="green" x1="132" y1="98" x2="382" y2="428" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6DBA5D"/>
+      <stop offset="0.58" stop-color="#1D7B4C"/>
+      <stop offset="1" stop-color="#0D3E2A"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="326" y1="105" x2="400" y2="247" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE56F"/>
+      <stop offset="0.52" stop-color="#FFB54B"/>
+      <stop offset="1" stop-color="#F36A3D"/>
+    </linearGradient>
+    <filter id="shadow" x="54" y="50" width="408" height="418" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#173128" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="116" fill="#FFF9EC"/>
+  <g filter="url(#shadow)">
+    <path d="M109 146C109 108 139 78 177 78H335C373 78 403 108 403 146V304C403 383 339 447 260 447H252C173 447 109 383 109 304V146Z" fill="#FFF4D7"/>
+    <path d="M129 151C129 124 151 102 178 102H334C361 102 383 124 383 151V302C383 372 326 423 257 423H255C184 423 129 372 129 302V151Z" fill="white"/>
+  </g>
+
+  <path d="M184 349V161" stroke="url(#green)" stroke-width="47" stroke-linecap="round"/>
+  <path d="M189 271C249 235 295 190 327 142" stroke="url(#green)" stroke-width="43" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M220 266L334 350" stroke="url(#green)" stroke-width="43" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M319 93C346 121 377 153 377 197C377 235 351 263 319 263C287 263 261 235 261 197C261 153 292 121 319 93Z" fill="url(#gold)"/>
+  <path d="M319 116C337 138 355 160 355 192C355 220 337 238 319 238C301 238 283 220 283 192C283 160 301 138 319 116Z" fill="#FFF9EC" opacity="0.35"/>
+
+  <path d="M304 133C280 132 252 142 232 164C214 184 207 210 212 232C235 238 264 235 287 215C310 195 321 168 318 138C314 136 310 134 304 133Z" fill="#48A85A"/>
+  <path d="M220 224C249 205 274 184 305 144" stroke="#FFF9EC" stroke-width="11" stroke-linecap="round"/>
+  <path d="M255 183C261 163 273 148 291 137" stroke="#FFF9EC" stroke-width="9" stroke-linecap="round"/>
+
+  <path d="M140 391C161 419 195 438 255 438C315 438 349 419 371 391" stroke="#F0BE3E" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="110" cy="214" r="12" fill="#F36A3D"/>
+  <circle cx="411" cy="303" r="13" fill="#63B75A"/>
+  <circle cx="394" cy="143" r="10" fill="#F0BE3E"/>
+</svg>
