@@ -71,12 +71,30 @@ function paymentDetails(formData) {
   };
 }
 
+function splitName(fullName) {
+  const parts = String(fullName || "").trim().split(/\s+/).filter(Boolean);
+  return {
+    givenName: parts[0] || "Customer",
+    familyName: parts.slice(1).join(" ") || "Kay Joy",
+  };
+}
+
 function squareVerificationDetails(formData) {
   const summary = totals();
+  const name = splitName(formData.get("name"));
   return {
     amount: summary.total.toFixed(2),
     currencyCode: "USD",
     intent: "CHARGE",
+    customerInitiated: true,
+    sellerKeyedIn: false,
+    billingContact: {
+      givenName: name.givenName,
+      familyName: name.familyName,
+      email: String(formData.get("email") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      countryCode: "US",
+    },
   };
 }
 
