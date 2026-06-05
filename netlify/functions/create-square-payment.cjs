@@ -28,6 +28,18 @@ function clean(value, fallback = "") {
   return String(value || fallback).trim().slice(0, 240);
 }
 
+function formatMoney(cents) {
+  return `$${(cents / 100).toFixed(2)}`;
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function validatePickup(pickup) {
   const day = clean(pickup.day);
   const time = clean(pickup.time);
@@ -86,6 +98,94 @@ async function squareRequest(path, accessToken, payload) {
   }
 
   return squarePayload;
+}
+
+async function sendOrderNotification({ customer, pickup, details, payment, order }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = process.env.ORDER_NOTIFICATION_EMAIL;
+  const from = process.env.ORDER_NOTIFICATION_FROM;
+
+  if (!apiKey || !to || !from) {
+    return false;
+  }
+
+  const pickupName = clean(pickup.name, clean(customer.name, "Customer"));
+  const itemLines = details.lines
+    .map((item) => `${item.quantity}x ${item.name} - ${formatMoney(Math.round(item.price * 100) * item.quantity)}`)
+    .join("\n");
+  const htmlLines = details.lines
+    .map((item) => `<li><strong>${escapeHtml(item.quantity)}x ${escapeHtml(item.name)}</strong> - ${formatMoney(Math.round(item.price * 100) * item.quantity)}<br><span>${escapeHtml(item.note)}</span></li>`)
+    .join("");
+  const receiptUrl = payment?.receipt_url || "";
+
+  const text = [
+    "New Kay Joy pickup order",
+    "",
+    `Pickup: ${clean(pickup.day)} at ${clean(pickup.time)}`,
+    `Pickup name: ${pickupName}`,
+    `Pickup address: ${PICKUP_ADDRESS}`,
+    "",
+    "Customer",
+    `Name: ${clean(customer.name, "Customer")}`,
+    `Phone: ${clean(customer.phone, "Not provided")}`,
+    `Email: ${clean(customer.email, "Not provided")}`,
+    pickup.notes ? `Notes: ${clean(pickup.notes)}` : "",
+    "",
+    "Items",
+    itemLines,
+    "",
+    `Subtotal: ${formatMoney(details.subtotalCents)}`,
+    `Maryland sales tax: ${formatMoney(details.taxCents)}`,
+    `Total paid: ${formatMoney(order?.total_money?.amount || details.totalCents)}`,
+    "",
+    `Square payment: ${payment?.id || "N/A"}`,
+    `Square order: ${order?.id || "N/A"}`,
+    receiptUrl ? `Receipt: ${receiptUrl}` : "",
+  ].filter(Boolean).join("\n");
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;color:#173128;line-height:1.5">
+      <h2 style="margin:0 0 12px">New Kay Joy pickup order</h2>
+      <p><strong>Pickup:</strong> ${escapeHtml(clean(pickup.day))} at ${escapeHtml(clean(pickup.time))}<br>
+      <strong>Pickup name:</strong> ${escapeHtml(pickupName)}<br>
+      <strong>Address:</strong> ${escapeHtml(PICKUP_ADDRESS)}</p>
+      <h3>Customer</h3>
+      <p><strong>Name:</strong> ${escapeHtml(clean(customer.name, "Customer"))}<br>
+      <strong>Phone:</strong> ${escapeHtml(clean(customer.phone, "Not provided"))}<br>
+      <strong>Email:</strong> ${escapeHtml(clean(customer.email, "Not provided"))}</p>
+      ${pickup.notes ? `<p><strong>Notes:</strong> ${escapeHtml(clean(pickup.notes))}</p>` : ""}
+      <h3>Items</h3>
+      <ul>${htmlLines}</ul>
+      <p><strong>Subtotal:</strong> ${formatMoney(details.subtotalCents)}<br>
+      <strong>Maryland sales tax:</strong> ${formatMoney(details.taxCents)}<br>
+      <strong>Total paid:</strong> ${formatMoney(order?.total_money?.amount || details.totalCents)}</p>
+      <p><strong>Square payment:</strong> ${escapeHtml(payment?.id || "N/A")}<br>
+      <strong>Square order:</strong> ${escapeHtml(order?.id || "N/A")}</p>
+      ${receiptUrl ? `<p><a href="${escapeHtml(receiptUrl)}">View Square receipt</a></p>` : ""}
+    </div>
+  `;
+
+  const emailResponse = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to,
+      subject: `New Kay Joy order: ${pickupName} - ${formatMoney(order?.total_money?.amount || details.totalCents)}`,
+      text,
+      html,
+    }),
+  });
+
+  if (!emailResponse.ok) {
+    const payload = await emailResponse.json().catch(() => ({}));
+    throw new Error(payload.message || "Order notification email failed.");
+  }
+
+  return true;
 }
 
 exports.handler = async (event) => {
@@ -166,11 +266,24 @@ exports.handler = async (event) => {
         buyer_email_address: clean(customer.email),
         note: note.slice(0, 500),
     });
+    let notificationSent = false;
+    try {
+      notificationSent = await sendOrderNotification({
+        customer,
+        pickup,
+        details,
+        payment: squarePayload.payment,
+        order,
+      });
+    } catch (notificationError) {
+      console.warn("Order notification failed:", notificationError.message);
+    }
 
     return response(200, {
       paymentId: squarePayload.payment?.id,
       orderId: order?.id,
       receiptUrl: squarePayload.payment?.receipt_url,
+      notificationSent,
     });
   } catch (error) {
     return response(error.statusCode || 500, {
