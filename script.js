@@ -44,7 +44,7 @@ const products = [
 const membership = {
   id: "kay-joy-pass",
   name: "Kay Joy Monthly Pass",
-  price: 37,
+  price: 36,
   benefits: "5 drinks for the month",
 };
 const BOTTLE_RETURN_DISCOUNT = 5;
@@ -67,7 +67,8 @@ const TAX_RATE = 0.06;
 
 const menu = document.querySelector("[data-menu]");
 const membershipFlavorGrid = document.querySelector("[data-membership-flavors]");
-const membershipPrice = document.querySelector("[data-membership-price]");
+const membershipPrices = document.querySelectorAll("[data-membership-price]");
+const membershipModal = document.querySelector("[data-membership-modal]");
 const cartPanel = document.querySelector("[data-cart-panel]");
 const cartItems = document.querySelector("[data-cart-items]");
 const cartEmpty = document.querySelector("[data-cart-empty]");
@@ -117,36 +118,43 @@ function findItem(id) {
 }
 
 function selectedMembership() {
-  const selected = document.querySelector("input[name='membership-pickup']:checked");
+  const selected = membershipModal?.querySelector("input[name='membership-pickup']:checked");
   const pickupType = selected ? selected.value : "all-at-once";
-  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(document.querySelector("[data-bottle-returns]")?.value, 10) || 0));
+  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipModal?.querySelector("[data-bottle-returns]")?.value, 10) || 0));
   const discount = bottleReturns * BOTTLE_RETURN_DISCOUNT;
-  const flavors = Array.from(document.querySelectorAll("[data-membership-flavor]"))
+  const flavors = Array.from(membershipModal?.querySelectorAll("[data-membership-flavor]") || [])
     .map((select) => select.value)
     .filter(Boolean);
+  const recurring = Boolean(membershipModal?.querySelector("[data-membership-recurring]")?.checked);
   const flavorSummary = flavors.length ? `Flavors: ${flavors.join(", ")}` : "Flavors selected at pickup";
   const discountSummary = bottleReturns
     ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${money.format(discount)} off`
     : "No bottle return discount selected";
+  const recurringSummary = recurring
+    ? "Recurring monthly pass requested"
+    : "One-month pass only";
 
   return {
     ...membership,
-    id: `${membership.id}-${pickupType}-reuse-${bottleReturns}`,
+    id: `${membership.id}-${pickupType}-reuse-${bottleReturns}${recurring ? "-recurring" : ""}`,
     price: membership.price - discount,
-    benefits: `${membership.benefits}. ${membershipPickupOptions[pickupType]}. ${flavorSummary}. ${discountSummary}`,
+    benefits: `${membership.benefits}. ${membershipPickupOptions[pickupType]}. ${flavorSummary}. ${discountSummary}. ${recurringSummary}`,
     pickupType,
     flavors,
     bottleReturns,
     discount,
+    recurring,
   };
 }
 
 function updateMembershipPrice() {
-  if (!membershipPrice) return;
+  if (!membershipPrices.length) return;
 
-  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(document.querySelector("[data-bottle-returns]")?.value, 10) || 0));
+  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipModal?.querySelector("[data-bottle-returns]")?.value, 10) || 0));
   const discountedPrice = membership.price - (bottleReturns * BOTTLE_RETURN_DISCOUNT);
-  membershipPrice.textContent = money.format(discountedPrice);
+  membershipPrices.forEach((price) => {
+    price.textContent = money.format(discountedPrice);
+  });
 }
 
 function addToCart(id, customItem) {
@@ -229,8 +237,25 @@ function openCart() {
 
 function closeCart() {
   cartPanel.classList.remove("is-open");
-  scrim.classList.remove("is-open");
+  if (!membershipModal?.open) {
+    scrim.classList.remove("is-open");
+  }
   cartPanel.setAttribute("aria-hidden", "true");
+}
+
+function openMembershipModal() {
+  if (!membershipModal) return;
+  updateMembershipPrice();
+  membershipModal.showModal();
+  scrim.classList.add("is-open");
+}
+
+function closeMembershipModal() {
+  if (!membershipModal) return;
+  membershipModal.close();
+  if (!cartPanel.classList.contains("is-open")) {
+    scrim.classList.remove("is-open");
+  }
 }
 
 function showToast(message) {
@@ -262,9 +287,18 @@ document.addEventListener("click", (event) => {
     openCart();
   }
 
+  if (event.target.closest("[data-open-membership]")) {
+    openMembershipModal();
+  }
+
+  if (event.target.closest("[data-close-membership]")) {
+    closeMembershipModal();
+  }
+
   if (event.target.closest("[data-add-membership]")) {
     const item = selectedMembership();
     addToCart(item.id, item);
+    closeMembershipModal();
     openCart();
   }
 
@@ -282,7 +316,24 @@ document.addEventListener("change", (event) => {
   }
 });
 
-scrim.addEventListener("click", closeCart);
+scrim.addEventListener("click", () => {
+  closeMembershipModal();
+  closeCart();
+});
+
+if (membershipModal) {
+  membershipModal.addEventListener("click", (event) => {
+    if (event.target === membershipModal) {
+      closeMembershipModal();
+    }
+  });
+
+  membershipModal.addEventListener("close", () => {
+    if (!cartPanel.classList.contains("is-open")) {
+      scrim.classList.remove("is-open");
+    }
+  });
+}
 
 if (checkoutForm) {
   checkoutForm.addEventListener("submit", (event) => {

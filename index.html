@@ -57,7 +57,7 @@
           <span>signature blends</span>
         </div>
         <div>
-          <strong>$37</strong>
+          <strong>$36</strong>
           <span>monthly drink pass</span>
         </div>
         <div>
@@ -90,14 +90,36 @@
           <ul>
             <li>Includes any 5 standard juices</li>
             <li>Redeem for pickup throughout the month</li>
-            <li>Member price: $37</li>
+            <li>Member price: $36</li>
             <li>Bring back up to 3 bottles and save $5 each for the month</li>
+            <li>Optional recurring monthly setup request</li>
           </ul>
         </div>
         <div class="membership-card">
           <span class="pass-label">Kay Joy Pass</span>
-          <strong data-membership-price>$37</strong>
+          <strong data-membership-price>$36</strong>
           <p>5 drinks / month</p>
+          <p class="fine-print">Choose flavors, pickup style, bottle return savings, and recurring preference in the next step.</p>
+          <button class="button primary" type="button" data-open-membership>Add membership</button>
+        </div>
+      </section>
+
+      <dialog class="membership-modal" data-membership-modal aria-labelledby="membership-modal-title">
+        <form class="membership-modal-card" method="dialog">
+          <div class="modal-heading">
+            <div>
+              <p class="eyebrow">Kay Joy Pass</p>
+              <h2 id="membership-modal-title">Build your monthly pass.</h2>
+            </div>
+            <button class="icon-button" type="button" data-close-membership aria-label="Close membership options">x</button>
+          </div>
+          <div class="modal-price-row">
+            <div>
+              <strong data-membership-price>$36</strong>
+              <span>5 drinks for the month</span>
+            </div>
+            <p>Discount updates when reused bottles are selected.</p>
+          </div>
           <fieldset class="membership-options">
             <legend>How do you want your drinks?</legend>
             <label>
@@ -131,9 +153,16 @@
               <option value="3">3 bottles - save $15</option>
             </select>
           </label>
-          <button class="button primary" type="button" data-add-membership>Add membership</button>
-        </div>
-      </section>
+          <label class="recurring-option">
+            <input type="checkbox" name="membership-recurring" data-membership-recurring>
+            <span>
+              <strong>Request recurring monthly pass</strong>
+              <small>Kay Joy will confirm the recurring setup after this first paid order.</small>
+            </span>
+          </label>
+          <button class="button primary full" type="button" data-add-membership>Add pass to cart</button>
+        </form>
+      </dialog>
 
       <section class="section pickup" id="pickup" aria-labelledby="pickup-title">
         <div class="section-heading reveal">
