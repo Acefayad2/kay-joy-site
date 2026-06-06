@@ -91,11 +91,11 @@ function resolveProduct(cartItem) {
     ? "Pickup preference: all 5 drinks at once"
     : "Pickup preference: 1 drink at a time throughout the month";
   const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipMatch[2], 10) || 0));
-  const discount = bottleReturns * BOTTLE_RETURN_DISCOUNT;
+  const discount = bottleReturns > 0 ? BOTTLE_RETURN_DISCOUNT : 0;
   const flavors = cleanFlavors(cartItem.flavors);
   const recurring = Boolean(cartItem.recurring || membershipMatch[3]);
   const discountNote = bottleReturns
-    ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${formatMoney(discount * 100)} off`
+    ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${formatMoney(discount * 100)} total off`
     : "No bottle return discount selected";
   const recurringNote = recurring
     ? "Recurring monthly pass requested"

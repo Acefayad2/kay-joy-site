@@ -121,14 +121,14 @@ function selectedMembership() {
   const selected = membershipModal?.querySelector("input[name='membership-pickup']:checked");
   const pickupType = selected ? selected.value : "all-at-once";
   const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipModal?.querySelector("[data-bottle-returns]")?.value, 10) || 0));
-  const discount = bottleReturns * BOTTLE_RETURN_DISCOUNT;
+  const discount = bottleReturns > 0 ? BOTTLE_RETURN_DISCOUNT : 0;
   const flavors = Array.from(membershipModal?.querySelectorAll("[data-membership-flavor]") || [])
     .map((select) => select.value)
     .filter(Boolean);
   const recurring = Boolean(membershipModal?.querySelector("[data-membership-recurring]")?.checked);
   const flavorSummary = flavors.length ? `Flavors: ${flavors.join(", ")}` : "Flavors selected at pickup";
   const discountSummary = bottleReturns
-    ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${money.format(discount)} off`
+    ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${money.format(discount)} total off`
     : "No bottle return discount selected";
   const recurringSummary = recurring
     ? "Recurring monthly pass requested"
@@ -151,7 +151,7 @@ function updateMembershipPrice() {
   if (!membershipPrices.length) return;
 
   const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipModal?.querySelector("[data-bottle-returns]")?.value, 10) || 0));
-  const discountedPrice = membership.price - (bottleReturns * BOTTLE_RETURN_DISCOUNT);
+  const discountedPrice = membership.price - (bottleReturns > 0 ? BOTTLE_RETURN_DISCOUNT : 0);
   membershipPrices.forEach((price) => {
     price.textContent = money.format(discountedPrice);
   });
