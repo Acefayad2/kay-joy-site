@@ -75,11 +75,12 @@ textarea {
 }
 
 .brand img {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
   object-fit: contain;
-  box-shadow: 0 8px 18px rgba(31, 140, 76, 0.16);
+  background: white;
+  box-shadow: 0 8px 18px rgba(31, 140, 76, 0.14);
 }
 
 nav {
@@ -362,7 +363,7 @@ h3 {
   bottom: 1.5rem;
   width: min(260px, 28vw);
   aspect-ratio: 1;
-  background: url("assets/kay-joy-logo.svg?v=2") center / contain no-repeat;
+  background: url("assets/kay-joy-logo-upload.jpeg?v=3") center / contain no-repeat;
   opacity: 0.08;
   pointer-events: none;
 }
