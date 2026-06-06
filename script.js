@@ -48,7 +48,6 @@ const membership = {
   benefits: "5 drinks for the month",
 };
 const BOTTLE_RETURN_DISCOUNT = 5;
-const MAX_BOTTLE_RETURNS = 3;
 
 const membershipPickupOptions = {
   "all-at-once": "Pickup preference: all 5 drinks at once",
@@ -120,24 +119,24 @@ function findItem(id) {
 function selectedMembership() {
   const selected = membershipModal?.querySelector("input[name='membership-pickup']:checked");
   const pickupType = selected ? selected.value : "all-at-once";
-  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipModal?.querySelector("[data-bottle-returns]")?.value, 10) || 0));
-  const discount = bottleReturns > 0 ? BOTTLE_RETURN_DISCOUNT : 0;
+  const bottlesReused = membershipModal?.querySelector("[data-bottle-returns]")?.value === "1";
+  const discount = bottlesReused ? BOTTLE_RETURN_DISCOUNT : 0;
   const flavors = Array.from(membershipModal?.querySelectorAll("[data-membership-flavor]") || [])
     .map((select) => select.value)
     .filter(Boolean);
   const flavorSummary = flavors.length ? `Flavors: ${flavors.join(", ")}` : "Flavors selected at pickup";
-  const discountSummary = bottleReturns
-    ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${money.format(discount)} total off`
+  const discountSummary = bottlesReused
+    ? `Bottle return discount: all 5 bottles reused for ${money.format(discount)} total off`
     : "No bottle return discount selected";
 
   return {
     ...membership,
-    id: `${membership.id}-${pickupType}-reuse-${bottleReturns}`,
+    id: `${membership.id}-${pickupType}-reuse-${bottlesReused ? "all" : "none"}`,
     price: membership.price - discount,
     benefits: `${membership.benefits}. ${membershipPickupOptions[pickupType]}. ${flavorSummary}. ${discountSummary}`,
     pickupType,
     flavors,
-    bottleReturns,
+    bottlesReused,
     discount,
   };
 }
@@ -145,8 +144,8 @@ function selectedMembership() {
 function updateMembershipPrice() {
   if (!membershipPrices.length) return;
 
-  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipModal?.querySelector("[data-bottle-returns]")?.value, 10) || 0));
-  const discountedPrice = membership.price - (bottleReturns > 0 ? BOTTLE_RETURN_DISCOUNT : 0);
+  const bottlesReused = membershipModal?.querySelector("[data-bottle-returns]")?.value === "1";
+  const discountedPrice = membership.price - (bottlesReused ? BOTTLE_RETURN_DISCOUNT : 0);
   membershipPrices.forEach((price) => {
     price.textContent = money.format(discountedPrice);
   });

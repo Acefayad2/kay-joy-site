@@ -15,7 +15,6 @@ const SQUARE_API_HOST = SQUARE_ENVIRONMENT === "sandbox"
 const TAX_RATE = 0.06;
 const MEMBERSHIP_PRICE = 36;
 const BOTTLE_RETURN_DISCOUNT = 5;
-const MAX_BOTTLE_RETURNS = 3;
 
 function response(statusCode, payload) {
   return {
@@ -70,7 +69,7 @@ function resolveProduct(cartItem) {
   const standardProduct = PRODUCTS[cartItem.id];
   if (standardProduct) return standardProduct;
 
-  const membershipMatch = String(cartItem.id || "").match(/^kay-joy-pass-(all-at-once|monthly-visits)(?:-reuse-([0-3]))?$/);
+  const membershipMatch = String(cartItem.id || "").match(/^kay-joy-pass-(all-at-once|monthly-visits)(?:-reuse-(all|none|[0-3]))?$/);
   if (!membershipMatch) {
     throw new Error(`Unsupported cart item: ${cartItem.id}`);
   }
@@ -78,11 +77,12 @@ function resolveProduct(cartItem) {
   const pickupLabel = membershipMatch[1] === "all-at-once"
     ? "Pickup preference: all 5 drinks at once"
     : "Pickup preference: 1 drink at a time throughout the month";
-  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipMatch[2], 10) || 0));
-  const discount = bottleReturns > 0 ? BOTTLE_RETURN_DISCOUNT : 0;
+  const reuseValue = membershipMatch[2] || "none";
+  const bottlesReused = reuseValue === "all" || (Number.parseInt(reuseValue, 10) || 0) > 0;
+  const discount = bottlesReused ? BOTTLE_RETURN_DISCOUNT : 0;
   const flavors = cleanFlavors(cartItem.flavors);
-  const discountNote = bottleReturns
-    ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${formatMoney(discount * 100)} total off`
+  const discountNote = bottlesReused
+    ? `Bottle return discount: all 5 bottles reused for ${formatMoney(discount * 100)} total off`
     : "No bottle return discount selected";
 
   return {
