@@ -623,6 +623,11 @@ h3 {
   font-weight: 900;
 }
 
+.membership-modal .flavor-grid label {
+  color: var(--leaf);
+  font-weight: 950;
+}
+
 .flavor-grid select,
 .bottle-return select {
   width: 100%;
