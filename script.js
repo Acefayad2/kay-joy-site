@@ -47,6 +47,8 @@ const membership = {
   price: 37,
   benefits: "5 drinks for the month",
 };
+const BOTTLE_RETURN_DISCOUNT = 5;
+const MAX_BOTTLE_RETURNS = 3;
 
 const membershipPickupOptions = {
   "all-at-once": "Pickup preference: all 5 drinks at once",
@@ -64,6 +66,8 @@ const money = new Intl.NumberFormat("en-US", {
 const TAX_RATE = 0.06;
 
 const menu = document.querySelector("[data-menu]");
+const membershipFlavorGrid = document.querySelector("[data-membership-flavors]");
+const membershipPrice = document.querySelector("[data-membership-price]");
 const cartPanel = document.querySelector("[data-cart-panel]");
 const cartItems = document.querySelector("[data-cart-items]");
 const cartEmpty = document.querySelector("[data-cart-empty]");
@@ -92,6 +96,22 @@ function renderMenu() {
     .join("");
 }
 
+function renderMembershipFlavors() {
+  if (!membershipFlavorGrid) return;
+
+  const options = products
+    .map((product) => `<option value="${product.name}">${product.name}</option>`)
+    .join("");
+  membershipFlavorGrid.innerHTML = Array.from({ length: 5 }, (_, index) => `
+    <label>
+      Drink ${index + 1}
+      <select name="membership-flavor-${index + 1}" data-membership-flavor required>
+        ${options}
+      </select>
+    </label>
+  `).join("");
+}
+
 function findItem(id) {
   return products.find((product) => product.id === id) || membership;
 }
@@ -99,13 +119,34 @@ function findItem(id) {
 function selectedMembership() {
   const selected = document.querySelector("input[name='membership-pickup']:checked");
   const pickupType = selected ? selected.value : "all-at-once";
+  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(document.querySelector("[data-bottle-returns]")?.value, 10) || 0));
+  const discount = bottleReturns * BOTTLE_RETURN_DISCOUNT;
+  const flavors = Array.from(document.querySelectorAll("[data-membership-flavor]"))
+    .map((select) => select.value)
+    .filter(Boolean);
+  const flavorSummary = flavors.length ? `Flavors: ${flavors.join(", ")}` : "Flavors selected at pickup";
+  const discountSummary = bottleReturns
+    ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${money.format(discount)} off`
+    : "No bottle return discount selected";
 
   return {
     ...membership,
-    id: `${membership.id}-${pickupType}`,
-    benefits: `${membership.benefits}. ${membershipPickupOptions[pickupType]}`,
+    id: `${membership.id}-${pickupType}-reuse-${bottleReturns}`,
+    price: membership.price - discount,
+    benefits: `${membership.benefits}. ${membershipPickupOptions[pickupType]}. ${flavorSummary}. ${discountSummary}`,
     pickupType,
+    flavors,
+    bottleReturns,
+    discount,
   };
+}
+
+function updateMembershipPrice() {
+  if (!membershipPrice) return;
+
+  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(document.querySelector("[data-bottle-returns]")?.value, 10) || 0));
+  const discountedPrice = membership.price - (bottleReturns * BOTTLE_RETURN_DISCOUNT);
+  membershipPrice.textContent = money.format(discountedPrice);
 }
 
 function addToCart(id, customItem) {
@@ -235,6 +276,12 @@ document.addEventListener("click", (event) => {
   if (event.target.closest("[data-close-cart]")) closeCart();
 });
 
+document.addEventListener("change", (event) => {
+  if (event.target.closest("[data-bottle-returns]")) {
+    updateMembershipPrice();
+  }
+});
+
 scrim.addEventListener("click", closeCart);
 
 if (checkoutForm) {
@@ -262,5 +309,7 @@ if (checkoutForm) {
 }
 
 renderMenu();
+renderMembershipFlavors();
+updateMembershipPrice();
 renderCart();
 setupReveal();

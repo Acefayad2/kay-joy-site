@@ -24,16 +24,6 @@ const PRODUCTS = {
     price: 8,
     note: "(Org.) kale, cucumbers, celery, cilantro, parsley, green apples, lemon, ginger, agave syrup",
   },
-  "kay-joy-pass-all-at-once": {
-    name: "Kay Joy Monthly Pass",
-    price: 37,
-    note: "5 drinks for the month. Pickup preference: all 5 drinks at once",
-  },
-  "kay-joy-pass-monthly-visits": {
-    name: "Kay Joy Monthly Pass",
-    price: 37,
-    note: "5 drinks for the month. Pickup preference: 1 drink at a time throughout the month",
-  },
 };
 
 const PICKUP_ADDRESS = "3901 Calverton Boulevard, Beltsville, Maryland";
@@ -43,6 +33,9 @@ const SQUARE_API_HOST = SQUARE_ENVIRONMENT === "sandbox"
   ? "https://connect.squareupsandbox.com"
   : "https://connect.squareup.com";
 const TAX_RATE_PERCENT = "6";
+const MEMBERSHIP_PRICE = 37;
+const BOTTLE_RETURN_DISCOUNT = 5;
+const MAX_BOTTLE_RETURNS = 3;
 
 function response(statusCode, payload) {
   return {
@@ -54,6 +47,10 @@ function response(statusCode, payload) {
 
 function clean(value, fallback = "") {
   return String(value || fallback).trim().slice(0, 240);
+}
+
+function formatMoney(cents) {
+  return `$${(cents / 100).toFixed(2)}`;
 }
 
 function validatePickup(pickup) {
@@ -68,12 +65,53 @@ function validatePickup(pickup) {
   }
 }
 
+function cleanFlavors(flavors) {
+  const allowed = new Set(Object.values(PRODUCTS).map((product) => product.name));
+  const cleaned = Array.isArray(flavors)
+    ? flavors.map((flavor) => clean(flavor)).filter((flavor) => allowed.has(flavor)).slice(0, 5)
+    : [];
+
+  while (cleaned.length < 5) {
+    cleaned.push("Customer choice");
+  }
+
+  return cleaned;
+}
+
+function resolveProduct(cartItem) {
+  const standardProduct = PRODUCTS[cartItem.id];
+  if (standardProduct) return standardProduct;
+
+  const membershipMatch = String(cartItem.id || "").match(/^kay-joy-pass-(all-at-once|monthly-visits)(?:-reuse-([0-3]))?$/);
+  if (!membershipMatch) {
+    throw new Error(`Unsupported cart item: ${cartItem.id}`);
+  }
+
+  const pickupLabel = membershipMatch[1] === "all-at-once"
+    ? "Pickup preference: all 5 drinks at once"
+    : "Pickup preference: 1 drink at a time throughout the month";
+  const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipMatch[2], 10) || 0));
+  const discount = bottleReturns * BOTTLE_RETURN_DISCOUNT;
+  const flavors = cleanFlavors(cartItem.flavors);
+  const discountNote = bottleReturns
+    ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${formatMoney(discount * 100)} off`
+    : "No bottle return discount selected";
+
+  return {
+    name: "Kay Joy Monthly Pass",
+    price: MEMBERSHIP_PRICE - discount,
+    note: [
+      "5 drinks for the month",
+      pickupLabel,
+      `Flavors: ${flavors.join(", ")}`,
+      discountNote,
+    ].join(". "),
+  };
+}
+
 function cartToLineItems(cart) {
   return cart.map((cartItem) => {
-    const product = PRODUCTS[cartItem.id];
-    if (!product) {
-      throw new Error(`Unsupported cart item: ${cartItem.id}`);
-    }
+    const product = resolveProduct(cartItem);
 
     const quantity = Math.max(1, Math.min(20, Number.parseInt(cartItem.quantity, 10) || 1));
     return {

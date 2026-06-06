@@ -592,6 +592,67 @@ h3 {
   line-height: 1.35;
 }
 
+.membership-flavors {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.membership-flavors legend,
+.bottle-return strong {
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 950;
+}
+
+.flavor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.flavor-grid label,
+.bottle-return {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.flavor-grid select,
+.bottle-return select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid rgba(23, 49, 40, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 850;
+  padding: 0 0.7rem;
+}
+
+.bottle-return {
+  padding: 0.75rem;
+  border: 1px solid rgba(23, 49, 40, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.bottle-return span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.bottle-return small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .pickup {
   background:
     linear-gradient(180deg, rgba(255, 250, 240, 0.78), rgba(246, 251, 239, 0.95)),
