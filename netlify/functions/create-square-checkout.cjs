@@ -94,7 +94,7 @@ function resolveProduct(cartItem) {
   const discount = bottlesReused ? BOTTLE_RETURN_DISCOUNT : 0;
   const flavors = cleanFlavors(cartItem.flavors);
   const discountNote = bottlesReused
-    ? `Bottle return discount: all 5 bottles reused for ${formatMoney(discount * 100)} total off`
+    ? `Bottle return discount: all 5 bottles returned to Kay in a bag for ${formatMoney(discount * 100)} total off`
     : "No bottle return discount selected";
 
   return {
