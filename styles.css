@@ -721,40 +721,6 @@ h3 {
   font-weight: 850;
 }
 
-.recurring-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.85rem;
-  border: 1px solid rgba(23, 49, 40, 0.12);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.78);
-  cursor: pointer;
-}
-
-.recurring-option input {
-  width: 20px;
-  min-height: 20px;
-  margin-top: 0.12rem;
-  accent-color: var(--leaf);
-}
-
-.recurring-option span {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.recurring-option strong {
-  color: var(--ink);
-  font-size: 0.95rem;
-}
-
-.recurring-option small {
-  color: var(--muted);
-  font-weight: 750;
-  line-height: 1.35;
-}
-
 .pickup {
   background:
     linear-gradient(180deg, rgba(255, 250, 240, 0.78), rgba(246, 251, 239, 0.95)),

@@ -125,25 +125,20 @@ function selectedMembership() {
   const flavors = Array.from(membershipModal?.querySelectorAll("[data-membership-flavor]") || [])
     .map((select) => select.value)
     .filter(Boolean);
-  const recurring = Boolean(membershipModal?.querySelector("[data-membership-recurring]")?.checked);
   const flavorSummary = flavors.length ? `Flavors: ${flavors.join(", ")}` : "Flavors selected at pickup";
   const discountSummary = bottleReturns
     ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${money.format(discount)} total off`
     : "No bottle return discount selected";
-  const recurringSummary = recurring
-    ? "Recurring monthly pass requested"
-    : "One-month pass only";
 
   return {
     ...membership,
-    id: `${membership.id}-${pickupType}-reuse-${bottleReturns}${recurring ? "-recurring" : ""}`,
+    id: `${membership.id}-${pickupType}-reuse-${bottleReturns}`,
     price: membership.price - discount,
-    benefits: `${membership.benefits}. ${membershipPickupOptions[pickupType]}. ${flavorSummary}. ${discountSummary}. ${recurringSummary}`,
+    benefits: `${membership.benefits}. ${membershipPickupOptions[pickupType]}. ${flavorSummary}. ${discountSummary}`,
     pickupType,
     flavors,
     bottleReturns,
     discount,
-    recurring,
   };
 }
 

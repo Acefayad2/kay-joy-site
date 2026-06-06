@@ -70,7 +70,7 @@ function resolveProduct(cartItem) {
   const standardProduct = PRODUCTS[cartItem.id];
   if (standardProduct) return standardProduct;
 
-  const membershipMatch = String(cartItem.id || "").match(/^kay-joy-pass-(all-at-once|monthly-visits)(?:-reuse-([0-3]))?(?:-(recurring))?$/);
+  const membershipMatch = String(cartItem.id || "").match(/^kay-joy-pass-(all-at-once|monthly-visits)(?:-reuse-([0-3]))?$/);
   if (!membershipMatch) {
     throw new Error(`Unsupported cart item: ${cartItem.id}`);
   }
@@ -81,13 +81,9 @@ function resolveProduct(cartItem) {
   const bottleReturns = Math.max(0, Math.min(MAX_BOTTLE_RETURNS, Number.parseInt(membershipMatch[2], 10) || 0));
   const discount = bottleReturns > 0 ? BOTTLE_RETURN_DISCOUNT : 0;
   const flavors = cleanFlavors(cartItem.flavors);
-  const recurring = Boolean(cartItem.recurring || membershipMatch[3]);
   const discountNote = bottleReturns
     ? `Bottle return discount: ${bottleReturns} reused bottle${bottleReturns === 1 ? "" : "s"} for ${formatMoney(discount * 100)} total off`
     : "No bottle return discount selected";
-  const recurringNote = recurring
-    ? "Recurring monthly pass requested"
-    : "One-month pass only";
 
   return {
     name: "Kay Joy Monthly Pass",
@@ -97,7 +93,6 @@ function resolveProduct(cartItem) {
       pickupLabel,
       `Flavors: ${flavors.join(", ")}`,
       discountNote,
-      recurringNote,
     ].join(". "),
   };
 }
