@@ -28,6 +28,18 @@ function clean(value, fallback = "") {
   return String(value || fallback).trim().slice(0, 240);
 }
 
+function cleanEmail(value) {
+  return clean(value).toLowerCase();
+}
+
+function splitName(fullName) {
+  const parts = clean(fullName, "Customer").split(/\s+/).filter(Boolean);
+  return {
+    givenName: parts[0] || "Customer",
+    familyName: parts.slice(1).join(" "),
+  };
+}
+
 function formatMoney(cents) {
   return `$${(cents / 100).toFixed(2)}`;
 }
@@ -144,6 +156,68 @@ async function squareRequest(path, accessToken, payload) {
   return squarePayload;
 }
 
+async function searchSquareCustomer(accessToken, { email, phone }) {
+  const filters = [];
+
+  if (email) {
+    filters.push({ email_address: { exact: email } });
+  }
+
+  if (phone) {
+    filters.push({ phone_number: { exact: phone } });
+  }
+
+  for (const filter of filters) {
+    try {
+      const payload = await squareRequest("/v2/customers/search", accessToken, {
+        query: { filter },
+        limit: 1,
+      });
+      const customer = payload.customers?.[0];
+      if (customer?.id) return customer.id;
+    } catch (error) {
+      console.warn("Square customer search failed:", error.message);
+    }
+  }
+
+  return "";
+}
+
+async function createSquareCustomer(accessToken, customer) {
+  const email = cleanEmail(customer.email);
+  const phone = clean(customer.phone);
+  const name = splitName(customer.name);
+  const existingCustomerId = await searchSquareCustomer(accessToken, { email, phone });
+
+  if (existingCustomerId) return existingCustomerId;
+
+  const customerPayload = {
+    idempotency_key: crypto.randomUUID(),
+    given_name: name.givenName,
+    family_name: name.familyName,
+    email_address: email || undefined,
+    phone_number: phone || undefined,
+    note: "Kay Joy website checkout customer",
+    reference_id: email || phone || `kayjoy-${crypto.randomUUID()}`,
+  };
+
+  try {
+    const payload = await squareRequest("/v2/customers", accessToken, customerPayload);
+    return payload.customer?.id || "";
+  } catch (error) {
+    if (phone) {
+      const payload = await squareRequest("/v2/customers", accessToken, {
+        ...customerPayload,
+        idempotency_key: crypto.randomUUID(),
+        phone_number: undefined,
+      });
+      return payload.customer?.id || "";
+    }
+
+    throw error;
+  }
+}
+
 async function sendOrderNotification({ customer, pickup, details, payment, order }) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.ORDER_NOTIFICATION_EMAIL;
@@ -256,6 +330,12 @@ exports.handler = async (event) => {
     const pickup = body.pickup || {};
     validatePickup(pickup);
     const details = getCartDetails(cart);
+    let squareCustomerId = "";
+    try {
+      squareCustomerId = await createSquareCustomer(accessToken, customer);
+    } catch (customerError) {
+      console.warn("Square customer profile failed:", customerError.message);
+    }
     const itemSummary = details.lines
       .map((item) => `${item.quantity}x ${item.name}`)
       .join(", ");
@@ -275,6 +355,7 @@ exports.handler = async (event) => {
       idempotency_key: crypto.randomUUID(),
       order: {
         location_id: locationId,
+        customer_id: squareCustomerId || undefined,
         source: { name: "Kay Joy website checkout" },
         line_items: details.lines.map((item) => ({
           name: item.name,
@@ -307,7 +388,8 @@ exports.handler = async (event) => {
           amount: orderTotalCents,
           currency: "USD",
         },
-        buyer_email_address: clean(customer.email),
+        customer_id: squareCustomerId || undefined,
+        buyer_email_address: cleanEmail(customer.email),
         note: note.slice(0, 500),
     });
     let notificationSent = false;
@@ -326,6 +408,7 @@ exports.handler = async (event) => {
     return response(200, {
       paymentId: squarePayload.payment?.id,
       orderId: order?.id,
+      customerId: squareCustomerId,
       receiptUrl: squarePayload.payment?.receipt_url,
       notificationSent,
     });
