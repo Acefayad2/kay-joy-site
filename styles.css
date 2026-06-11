@@ -787,6 +787,25 @@ h3 {
   text-transform: uppercase;
 }
 
+.pickup-note {
+  display: inline-grid;
+  gap: 0.2rem;
+  margin-top: 0.75rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(232, 167, 42, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 238, 174, 0.34);
+  color: var(--ink);
+  font-weight: 850;
+}
+
+.pickup-note span {
+  color: #9b6310;
+  font-size: 0.74rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
