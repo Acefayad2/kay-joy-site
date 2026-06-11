@@ -126,7 +126,7 @@ function selectedMembership() {
     .filter(Boolean);
   const flavorSummary = flavors.length ? `Flavors: ${flavors.join(", ")}` : "Flavors selected at pickup";
   const discountSummary = bottlesReused
-    ? `Bottle return discount: all 5 bottles returned to Kay in a bag for ${money.format(discount)} total off`
+    ? `Bottle return discount: all 5 cleaned bottles returned in a white bag for ${money.format(discount)} total off`
     : "No bottle return discount selected";
 
   return {
