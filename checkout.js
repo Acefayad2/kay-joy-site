@@ -66,6 +66,7 @@ function paymentDetails(formData) {
       name: formData.get("pickupName"),
       day: formData.get("day"),
       time: formData.get("time"),
+      prepPreferences: formData.get("prepPreferences"),
       notes: formData.get("notes"),
     },
   };

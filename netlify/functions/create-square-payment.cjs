@@ -247,6 +247,7 @@ async function sendOrderNotification({ customer, pickup, details, payment, order
     `Name: ${clean(customer.name, "Customer")}`,
     `Phone: ${clean(customer.phone, "Not provided")}`,
     `Email: ${clean(customer.email, "Not provided")}`,
+    pickup.prepPreferences ? `Juice prep preferences: ${clean(pickup.prepPreferences)}` : "",
     pickup.notes ? `Notes: ${clean(pickup.notes)}` : "",
     "",
     "Items",
@@ -271,6 +272,7 @@ async function sendOrderNotification({ customer, pickup, details, payment, order
       <p><strong>Name:</strong> ${escapeHtml(clean(customer.name, "Customer"))}<br>
       <strong>Phone:</strong> ${escapeHtml(clean(customer.phone, "Not provided"))}<br>
       <strong>Email:</strong> ${escapeHtml(clean(customer.email, "Not provided"))}</p>
+      ${pickup.prepPreferences ? `<p><strong>Juice prep preferences:</strong> ${escapeHtml(clean(pickup.prepPreferences))}</p>` : ""}
       ${pickup.notes ? `<p><strong>Notes:</strong> ${escapeHtml(clean(pickup.notes))}</p>` : ""}
       <h3>Items</h3>
       <ul>${htmlLines}</ul>
@@ -347,6 +349,7 @@ exports.handler = async (event) => {
       customer.phone ? `Phone: ${clean(customer.phone)}` : "",
       customer.email ? `Email: ${clean(customer.email)}` : "",
       pickup.name ? `Pickup name: ${clean(pickup.name)}` : "",
+      pickup.prepPreferences ? `Juice prep preferences: ${clean(pickup.prepPreferences)}` : "",
       pickup.notes ? `Notes: ${clean(pickup.notes)}` : "",
       `Maryland sales tax: $${(details.taxCents / 100).toFixed(2)}`,
     ].filter(Boolean).join(" | ");
